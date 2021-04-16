@@ -36,7 +36,6 @@ public class RoleController {
      */
     @PutMapping("")
     public  int updateRole(Role role){
-
         return roleService.updateRole(role);
     }
 
