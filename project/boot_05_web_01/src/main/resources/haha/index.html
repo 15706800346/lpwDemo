@@ -7,17 +7,18 @@
 <body>
 <h1>atguigu,你好</h1>
 测试REST风格
-<form action="/user" method="get">
+<form action="/userGet" method="get">
     <input value="REST-GET 提交" type="submit"/>
 </form>
-<form action="/user" method="post">
+<form action="/userPost" method="post">
     <input value="REST-POST 提交" type="submit"/>
 </form>
-<form action="/user" method="post">
+<form action="/userDel" method="post">
     <input name="_method" type="hidden" value="DELETE">
+    <input name="_m" type="hidden" value="DELETE">
     <input value="REST-DELETE 提交" type="submit"/>
 </form>
-<form action="/user" method="post">
+<form action="/userPut" method="post">
     <input name="_method" type="hidden" value="PuT">
     <input value="REST-PUT 提交" type="submit"/>
 </form>
