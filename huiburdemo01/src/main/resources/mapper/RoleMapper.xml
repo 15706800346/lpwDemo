@@ -1,0 +1,28 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD com.example.Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.huiburdemo01.mapper.RoleMapper">
+
+    <resultMap id="resultMap" type="com.example.huiburdemo01.User.Po.Role">
+        <id property="id" column="id"></id>
+        <result property="rname" column="rname"/>
+    </resultMap>
+    <insert id="insertRole" parameterType="com.example.huiburdemo01.User.Po.Role">
+        insert into role(id,rname) values(#{id},#{rname})
+    </insert>
+
+    <delete id="deleteRole" parameterType="com.example.huiburdemo01.User.Po.Role">
+        delete from role where  id=#{id}
+    </delete>
+
+    <update id="updateRole" parameterType="com.example.huiburdemo01.User.Po.Role">
+        update role set rname=#{rname} where id=#{id}
+    </update>
+
+    <select id="selectById" parameterType="com.example.huiburdemo01.User.Po.Role" resultType="com.example.huiburdemo01.User.Po.Role">
+        select * from role where id=#{id} or rname=#{rname}
+    </select>
+    <select id="listUserRole" parameterType="com.example.huiburdemo01.User.Vo.UserParam" resultType="com.example.huiburdemo01.User.Po.Role">
+        select * from role limit ${UserParam.pageSize},${UserParam.pageData}
+    </select>
+</mapper>

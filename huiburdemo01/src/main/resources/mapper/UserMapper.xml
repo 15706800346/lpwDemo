@@ -1,0 +1,57 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD com.example.Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.huiburdemo01.mapper.UserMapper">
+
+    <resultMap id="UserVOResultMap1" type="com.example.huiburdemo01.User.Vo.UserVo">
+        <result property="name" column="name"/>
+        <result property="sex" column="sex"/>
+        <result property="number" column="number"/>
+        <collection property="roles" ofType="com.example.huiburdemo01.User.Po.Role">
+            <result property="rname" column="rname"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="UserVOResultMap" type="com.example.huiburdemo01.User.Vo.UserVo">
+        <id property="id" column="u_id"/>
+        <result property="name" column="name"/>
+        <result property="sex" column="sex"/>
+        <result property="number" column="number"/>
+        <collection property="roles" ofType="com.example.huiburdemo01.User.Po.Role">
+            <id property="id" column="p_id"/>
+            <result property="rname" column="rname"/>
+        </collection>
+    </resultMap>
+    <insert id="insert" parameterType="com.example.huiburdemo01.User.Po.User">
+        insert into users(id,name,sex,number,password) values(#{id},#{name},#{sex},#{number},#{password})
+    </insert>
+
+    <delete id="delete" parameterType="com.example.huiburdemo01.User.Po.User">
+        delete from users where  id=#{id}
+    </delete>
+
+    <update id="update" parameterType="com.example.huiburdemo01.User.Po.User">
+        update users set name=#{name},sex=#{sex},number=#{number},password=#{password} where id=#{id}
+    </update>
+
+    <select id="getById" parameterType="com.example.huiburdemo01.User.Po.User" resultType="com.example.huiburdemo01.User.Po.User">
+        select * from users where id=#{id}
+    </select>
+
+    <select id="listUser" parameterType="com.example.huiburdemo01.User.Vo.UserParam" resultType="com.example.huiburdemo01.User.Vo.UserParam">
+        select * from users limit #{UserParam.pageSize},#{UserParam.pageData}
+    </select>
+
+    <select id="getByUserRole"   resultMap="UserVOResultMap1">
+        select * from associate_name
+        inner join users on users.name=associate_name.u_name
+        inner join role on role.rname=associate_name.p_name
+        where users.name=#{name}
+    </select>
+    <select id="getByIdRole"  resultMap="UserVOResultMap">
+        select * from associate
+        inner join users on users.id=associate.u_id
+        inner join role on role.id=associate.p_id
+        where users.id=#{id}
+    </select>
+</mapper>
