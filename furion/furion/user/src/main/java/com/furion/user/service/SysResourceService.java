@@ -10,6 +10,7 @@ import com.furion.user.model.po.SysResource;
  * @Description 系统资源表增删改查方法
  */
 public interface SysResourceService {
+
     /**
      * 增加一条系统资源表数据
      * @param sysResourceDTO
