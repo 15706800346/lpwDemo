@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.furion.user.mapper.UmsUserRegistLogMapper">
+  <resultMap id="BaseResultMap" type="com.furion.user.model.po.UmsUserRegistLog">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="register_method" jdbcType="TINYINT" property="registerMethod" />
+    <result column="register_at" jdbcType="INTEGER" property="registerAt" />
+    <result column="register_ip" jdbcType="VARCHAR" property="registerIp" />
+    <result column="register_client" jdbcType="VARCHAR" property="registerClient" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, user_id, register_method, register_at, register_ip, register_client
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ums_user_regist_log
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from ums_user_regist_log
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+<!--  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.furion.user.po.UmsUserRegistLog" useGeneratedKeys="true">-->
+<!--    insert into ums_user_regist_log (user_id, register_method, register_at, -->
+<!--      register_ip, register_client)-->
+<!--    values (#{userId,jdbcType=BIGINT}, #{registerMethod,jdbcType=TINYINT}, #{registerAt,jdbcType=INTEGER}, -->
+<!--      #{registerIp,jdbcType=VARCHAR}, #{registerClient,jdbcType=VARCHAR})-->
+<!--  </insert>-->
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.furion.user.model.po.UmsUserRegistLog" useGeneratedKeys="true">
+    insert into ums_user_regist_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="registerMethod != null">
+        register_method,
+      </if>
+      <if test="registerAt != null">
+        register_at,
+      </if>
+      <if test="registerIp != null">
+        register_ip,
+      </if>
+      <if test="registerClient != null">
+        register_client,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="registerMethod != null">
+        #{registerMethod,jdbcType=TINYINT},
+      </if>
+      <if test="registerAt != null">
+        #{registerAt,jdbcType=INTEGER},
+      </if>
+      <if test="registerIp != null">
+        #{registerIp,jdbcType=VARCHAR},
+      </if>
+      <if test="registerClient != null">
+        #{registerClient,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.furion.user.model.po.UmsUserRegistLog">
+    update ums_user_regist_log
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="registerMethod != null">
+        register_method = #{registerMethod,jdbcType=TINYINT},
+      </if>
+      <if test="registerAt != null">
+        register_at = #{registerAt,jdbcType=INTEGER},
+      </if>
+      <if test="registerIp != null">
+        register_ip = #{registerIp,jdbcType=VARCHAR},
+      </if>
+      <if test="registerClient != null">
+        register_client = #{registerClient,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+<!--  <update id="updateByPrimaryKey" parameterType="com.furion.user.po.UmsUserRegistLog">-->
+<!--    update ums_user_regist_log-->
+<!--    set user_id = #{userId,jdbcType=BIGINT},-->
+<!--      register_method = #{registerMethod,jdbcType=TINYINT},-->
+<!--      register_at = #{registerAt,jdbcType=INTEGER},-->
+<!--      register_ip = #{registerIp,jdbcType=VARCHAR},-->
+<!--      register_client = #{registerClient,jdbcType=VARCHAR}-->
+<!--    where id = #{id,jdbcType=BIGINT}-->
+<!--  </update>-->
+</mapper>

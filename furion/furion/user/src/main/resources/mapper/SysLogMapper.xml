@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.furion.user.mapper.SysLogMapper">
+  <resultMap id="BaseResultMap" type="com.furion.user.model.po.SysLog">
+    <id column="log_id" jdbcType="BIGINT" property="logId" />
+    <result column="op_type" jdbcType="INTEGER" property="opType" />
+    <result column="content" jdbcType="BIT" property="content" />
+    <result column="operator" jdbcType="VARCHAR" property="operator" />
+    <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    log_id, op_type, content, `operator`, update_at
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_log
+    where log_id = #{logId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sys_log
+    where log_id = #{logId,jdbcType=BIGINT}
+  </delete>
+<!--  <insert id="insert" parameterType="com.furion.user.po.SysLog">-->
+<!--    insert into sys_log (log_id, op_type, content, -->
+<!--      `operator`, update_at)-->
+<!--    values (#{logId,jdbcType=BIGINT}, #{opType,jdbcType=INTEGER}, #{content,jdbcType=BIT}, -->
+<!--      #{operator,jdbcType=VARCHAR}, #{updateAt,jdbcType=TIMESTAMP})-->
+<!--  </insert>-->
+  <insert id="insertSelective" parameterType="com.furion.user.model.po.SysLog">
+    insert into sys_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="logId != null">
+        log_id,
+      </if>
+      <if test="opType != null">
+        op_type,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="operator != null">
+        `operator`,
+      </if>
+      <if test="updateAt != null">
+        update_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="logId != null">
+        #{logId,jdbcType=BIGINT},
+      </if>
+      <if test="opType != null">
+        #{opType,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=BIT},
+      </if>
+      <if test="operator != null">
+        #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="updateAt != null">
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.furion.user.model.po.SysLog">
+    update sys_log
+    <set>
+      <if test="opType != null">
+        op_type = #{opType,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=BIT},
+      </if>
+      <if test="operator != null">
+        `operator` = #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="updateAt != null">
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where log_id = #{logId,jdbcType=BIGINT}
+  </update>
+<!--  <update id="updateByPrimaryKey" parameterType="com.furion.user.po.SysLog">-->
+<!--    update sys_log-->
+<!--    set op_type = #{opType,jdbcType=INTEGER},-->
+<!--      content = #{content,jdbcType=BIT},-->
+<!--      `operator` = #{operator,jdbcType=VARCHAR},-->
+<!--      update_at = #{updateAt,jdbcType=TIMESTAMP}-->
+<!--    where log_id = #{logId,jdbcType=BIGINT}-->
+<!--  </update>-->
+</mapper>

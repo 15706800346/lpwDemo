@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.furion.user.mapper.SysResourceMapper">
+  <resultMap id="BaseResultMap" type="com.furion.user.model.po.SysResource">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="origin_name" jdbcType="VARCHAR" property="originName" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="type" jdbcType="BIT" property="type" />
+    <result column="path" jdbcType="VARCHAR" property="path" />
+    <result column="size" jdbcType="INTEGER" property="size" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+    <result column="create_by" jdbcType="BIGINT" property="createBy" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, origin_name, `name`, `type`, `path`, `size`, description, create_at, create_by
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sys_resource
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sys_resource
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+<!--  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.furion.user.model.po.SysResource" useGeneratedKeys="true">-->
+<!--    insert into sys_resource (origin_name, `name`, `type`, -->
+<!--      `path`, `size`, description, -->
+<!--      create_at, create_by)-->
+<!--    values (#{originName,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=BIT}, -->
+<!--      #{path,jdbcType=VARCHAR}, #{size,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, -->
+<!--      #{createAt,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT})-->
+<!--  </insert>-->
+
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.furion.user.model.po.SysResource" useGeneratedKeys="true">
+    insert into sys_resource
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="originName != null">
+        origin_name,
+      </if>
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="type != null">
+        `type`,
+      </if>
+      <if test="path != null">
+        `path`,
+      </if>
+      <if test="size != null">
+        `size`,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="createAt != null">
+        create_at,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="originName != null">
+        #{originName,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=BIT},
+      </if>
+      <if test="path != null">
+        #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="size != null">
+        #{size,jdbcType=INTEGER},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null">
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.furion.user.model.po.SysResource">
+    update sys_resource
+    <set>
+      <if test="originName != null">
+        origin_name = #{originName,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        `type` = #{type,jdbcType=BIT},
+      </if>
+      <if test="path != null">
+        `path` = #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="size != null">
+        `size` = #{size,jdbcType=INTEGER},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null">
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+<!--  <update id="updateByPrimaryKey" parameterType="com.furion.user.model.po.SysResource">-->
+<!--    update sys_resource-->
+<!--    set origin_name = #{originName,jdbcType=VARCHAR},-->
+<!--      `name` = #{name,jdbcType=VARCHAR},-->
+<!--      `type` = #{type,jdbcType=BIT},-->
+<!--      `path` = #{path,jdbcType=VARCHAR},-->
+<!--      `size` = #{size,jdbcType=INTEGER},-->
+<!--      description = #{description,jdbcType=VARCHAR},-->
+<!--      create_at = #{createAt,jdbcType=TIMESTAMP},-->
+<!--      create_by = #{createBy,jdbcType=BIGINT}-->
+<!--    where id = #{id,jdbcType=BIGINT}-->
+<!--  </update>-->
+</mapper>

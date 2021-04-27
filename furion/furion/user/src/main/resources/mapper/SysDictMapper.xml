@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.furion.user.mapper.SysDictMapper">
+  <resultMap id="BaseResultMap" type="com.furion.user.model.po.SysDict">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="value" jdbcType="VARCHAR" property="value" />
+    <result column="seq" jdbcType="INTEGER" property="seq" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    <result column="is_default" jdbcType="BIT" property="isDefault" />
+    <result column="is_fixed" jdbcType="BIT" property="isFixed" />
+    <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+    <result column="create_by" jdbcType="BIGINT" property="createBy" />
+    <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+    <result column="update_by" jdbcType="BIGINT" property="updateBy" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, parent_id, code, `name`, `value`, seq, description, is_deleted, is_default, is_fixed, 
+    create_at, create_by, update_at, update_by, remark
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_dict
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sys_dict
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+<!--  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.furion.user.model.po.SysDict" useGeneratedKeys="true">-->
+<!--    insert into sys_dict (parent_id, code, `name`, -->
+<!--      `value`, seq, description, -->
+<!--      is_deleted, is_default, is_fixed, -->
+<!--      create_at, create_by, update_at, -->
+<!--      update_by, remark)-->
+<!--    values (#{parentId,jdbcType=BIGINT}, #{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, -->
+<!--      #{value,jdbcType=VARCHAR}, #{seq,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, -->
+<!--      #{isDeleted,jdbcType=BIT}, #{isDefault,jdbcType=BIT}, #{isFixed,jdbcType=BIT}, -->
+<!--      #{createAt,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT}, #{updateAt,jdbcType=TIMESTAMP}, -->
+<!--      #{updateBy,jdbcType=BIGINT}, #{remark,jdbcType=VARCHAR})-->
+<!--  </insert>-->
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.furion.user.model.po.SysDict" useGeneratedKeys="true">
+    insert into sys_dict
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="code != null">
+        code,
+      </if>
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="value != null">
+        `value`,
+      </if>
+      <if test="seq != null">
+        seq,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="isDefault != null">
+        is_default,
+      </if>
+      <if test="isFixed != null">
+        is_fixed,
+      </if>
+      <if test="createAt != null">
+        create_at,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="updateAt != null">
+        update_at,
+      </if>
+      <if test="updateBy != null">
+        update_by,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="parentId != null">
+        #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="value != null">
+        #{value,jdbcType=VARCHAR},
+      </if>
+      <if test="seq != null">
+        #{seq,jdbcType=INTEGER},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=BIT},
+      </if>
+      <if test="isDefault != null">
+        #{isDefault,jdbcType=BIT},
+      </if>
+      <if test="isFixed != null">
+        #{isFixed,jdbcType=BIT},
+      </if>
+      <if test="createAt != null">
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=BIGINT},
+      </if>
+      <if test="updateAt != null">
+        #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        #{updateBy,jdbcType=BIGINT},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.furion.user.model.po.SysDict">
+    update sys_dict
+    <set>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="code != null">
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="value != null">
+        `value` = #{value,jdbcType=VARCHAR},
+      </if>
+      <if test="seq != null">
+        seq = #{seq,jdbcType=INTEGER},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=BIT},
+      </if>
+      <if test="isDefault != null">
+        is_default = #{isDefault,jdbcType=BIT},
+      </if>
+      <if test="isFixed != null">
+        is_fixed = #{isFixed,jdbcType=BIT},
+      </if>
+      <if test="createAt != null">
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=BIGINT},
+      </if>
+      <if test="updateAt != null">
+        update_at = #{updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=BIGINT},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+<!--  <update id="updateByPrimaryKey" parameterType="com.furion.user.model.po.SysDict">-->
+<!--    update sys_dict-->
+<!--    set parent_id = #{parentId,jdbcType=BIGINT},-->
+<!--      code = #{code,jdbcType=VARCHAR},-->
+<!--      `name` = #{name,jdbcType=VARCHAR},-->
+<!--      `value` = #{value,jdbcType=VARCHAR},-->
+<!--      seq = #{seq,jdbcType=INTEGER},-->
+<!--      description = #{description,jdbcType=VARCHAR},-->
+<!--      is_deleted = #{isDeleted,jdbcType=BIT},-->
+<!--      is_default = #{isDefault,jdbcType=BIT},-->
+<!--      is_fixed = #{isFixed,jdbcType=BIT},-->
+<!--      create_at = #{createAt,jdbcType=TIMESTAMP},-->
+<!--      create_by = #{createBy,jdbcType=BIGINT},-->
+<!--      update_at = #{updateAt,jdbcType=TIMESTAMP},-->
+<!--      update_by = #{updateBy,jdbcType=BIGINT},-->
+<!--      remark = #{remark,jdbcType=VARCHAR}-->
+<!--    where id = #{id,jdbcType=BIGINT}-->
+<!--  </update>-->
+</mapper>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.furion.user.mapper.SysUpdLogMapper">
+  <resultMap id="BaseResultMap" type="com.furion.user.model.po.SysUpdLog">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="attribute_name" jdbcType="VARCHAR" property="attributeName" />
+    <result column="attribute_old_val" jdbcType="VARCHAR" property="attributeOldVal" />
+    <result column="attribute_new_val" jdbcType="VARCHAR" property="attributeNewVal" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, user_id, attribute_name, attribute_old_val, attribute_new_val, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_upd_log
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sys_upd_log
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+<!--  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.furion.user.po.SysUpdLog" useGeneratedKeys="true">-->
+<!--    insert into sys_upd_log (user_id, attribute_name, attribute_old_val, -->
+<!--      attribute_new_val, update_time)-->
+<!--    values (#{userId,jdbcType=BIGINT}, #{attributeName,jdbcType=VARCHAR}, #{attributeOldVal,jdbcType=VARCHAR}, -->
+<!--      #{attributeNewVal,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})-->
+<!--  </insert>-->
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.furion.user.model.po.SysUpdLog" useGeneratedKeys="true">
+    insert into sys_upd_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="attributeName != null">
+        attribute_name,
+      </if>
+      <if test="attributeOldVal != null">
+        attribute_old_val,
+      </if>
+      <if test="attributeNewVal != null">
+        attribute_new_val,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="attributeName != null">
+        #{attributeName,jdbcType=VARCHAR},
+      </if>
+      <if test="attributeOldVal != null">
+        #{attributeOldVal,jdbcType=VARCHAR},
+      </if>
+      <if test="attributeNewVal != null">
+        #{attributeNewVal,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.furion.user.model.po.SysUpdLog">
+    update sys_upd_log
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="attributeName != null">
+        attribute_name = #{attributeName,jdbcType=VARCHAR},
+      </if>
+      <if test="attributeOldVal != null">
+        attribute_old_val = #{attributeOldVal,jdbcType=VARCHAR},
+      </if>
+      <if test="attributeNewVal != null">
+        attribute_new_val = #{attributeNewVal,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+<!--  <update id="updateByPrimaryKey" parameterType="com.furion.user.po.SysUpdLog">-->
+<!--    update sys_upd_log-->
+<!--    set user_id = #{userId,jdbcType=BIGINT},-->
+<!--      attribute_name = #{attributeName,jdbcType=VARCHAR},-->
+<!--      attribute_old_val = #{attributeOldVal,jdbcType=VARCHAR},-->
+<!--      attribute_new_val = #{attributeNewVal,jdbcType=VARCHAR},-->
+<!--      update_time = #{updateTime,jdbcType=TIMESTAMP}-->
+<!--    where id = #{id,jdbcType=BIGINT}-->
+<!--  </update>-->
+</mapper>

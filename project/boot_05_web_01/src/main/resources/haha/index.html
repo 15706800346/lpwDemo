@@ -7,27 +7,38 @@
 <body>
 <h1>atguigu,你好</h1>
 测试REST风格
-<form action="/userGet" method="get">
+<form action="/user" method="get">
     <input value="REST-GET 提交" type="submit"/>
 </form>
-<form action="/userPost" method="post">
+<form action="/user" method="post">
     <input value="REST-POST 提交" type="submit"/>
 </form>
-<form action="/userDel" method="post">
+<form action="/user" method="post">
     <input name="_method" type="hidden" value="DELETE">
     <input name="_m" type="hidden" value="DELETE">
     <input value="REST-DELETE 提交" type="submit"/>
 </form>
-<form action="/userPut" method="post">
+<form action="/user" method="post">
     <input name="_method" type="hidden" value="PuT">
     <input value="REST-PUT 提交" type="submit"/>
 </form>
 <hr/>
 测试版本注解:
-<a href="/car/1">@PathVariable</a> <br>
-<a href="/car/1">@RequestHeader</a> <br>
-<a href="/cars?brand=byd">@RequestParam-GET</a> <br>
-<a href="/cars?brand=byd&&brand=yd">@RequestParam-GET</a> <br>
+<ul>
+    <a href="/car/3/owner/lpw?age=18&inters=basketball&inters=game">/car/{id}/owner/{username}</a>
+    <li>@pathVariable(路径变量)</li>
+    <li>@RequestHeader(获取请求头)</li>
+    <li>@RequestParam(获取请求参数)</li>
+    <li>@CookieValue(获取cookie值)</li>
+    <li>@RequestBody(获取请求体)</li>
+    <li>@RequestAttribute(获取request域属性)</li>
+    <li>@MatrixVariable(矩阵变量)</li>
+</ul>
+<!--<a href="/car/1">@PathVariable</a> <br>-->
+<!--<a href="/car/1">@RequestHeader</a> <br>-->
+<!--<a href="/cars?brand=byd">@RequestParam-GET</a> <br>-->
+<!--<a href="/cars?brand=byd&&brand=yd">@RequestParam-GET</a> <br>-->
+
 <a href="/cars/sell;low=34;brand=byd,audi,yd">@MatrixVariable(矩阵变量)</a>
 <a href="/cars/sell;low=34;brand=byd;brand=audi;brand=yd">@MatrixVariable(矩阵变量)</a>
 <a href="/boss/1;age=20/2;age=10">@MatrixVariable(矩阵变量) /boss/{bossId}/{empId}</a>
