@@ -11,6 +11,7 @@ import com.furion.user.model.po.SysResource;
  */
 public interface SysResourceService {
 
+
     /**
      * 增加一条系统资源表数据
      * @param sysResourceDTO
