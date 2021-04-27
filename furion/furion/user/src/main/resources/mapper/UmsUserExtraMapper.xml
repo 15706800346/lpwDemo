@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.furion.user.mapper.UmsUserExtraMapper">
+  <resultMap id="BaseResultMap" type="com.furion.user.model.po.UmsUserExtra">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="vendor" jdbcType="VARCHAR" property="vendor" />
+    <result column="client_name" jdbcType="VARCHAR" property="clientName" />
+    <result column="client_version" jdbcType="VARCHAR" property="clientVersion" />
+    <result column="os_name" jdbcType="VARCHAR" property="osName" />
+    <result column="os_version" jdbcType="VARCHAR" property="osVersion" />
+    <result column="device_name" jdbcType="VARCHAR" property="deviceName" />
+    <result column="device_id" jdbcType="VARCHAR" property="deviceId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, user_id, vendor, client_name, client_version, os_name, os_version, device_name, 
+    device_id
+  </sql>
+  <select id="findByPage" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ums_user_extra
+  </select>
+  <select id="selectUmsUserExtraById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from ums_user_extra
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteUmsUserExtraById" parameterType="java.lang.Long">
+    delete from ums_user_extra
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insertAllUmsUserExtra" keyColumn="user_id" keyProperty="userId" parameterType="com.furion.user.model.po.UmsUserExtra" useGeneratedKeys="true">
+    insert into ums_user_extra (vendor, client_name,
+      client_version, os_name, os_version, 
+      device_name, device_id)
+    values (#{umsUserExtra.vendor,jdbcType=VARCHAR},
+     #{umsUserExtra.clientName,jdbcType=VARCHAR},
+      #{umsUserExtra.clientVersion,jdbcType=VARCHAR}, #{umsUserExtra.osName,jdbcType=VARCHAR}, #{umsUserExtra.osVersion,jdbcType=VARCHAR}, 
+      #{umsUserExtra.deviceName,jdbcType=VARCHAR}, #{umsUserExtra.deviceId,jdbcType=VARCHAR})
+  </insert>
+
+  <update id="updateUmsUserExtraById" parameterType="com.furion.user.model.po.UmsUserExtra">
+    update ums_user_extra
+    set user_id = #{umsUserExtra.userId,jdbcType=BIGINT},
+      vendor = #{umsUserExtra.vendor,jdbcType=VARCHAR},
+      client_name = #{umsUserExtra.clientName,jdbcType=VARCHAR},
+      client_version = #{umsUserExtra.clientVersion,jdbcType=VARCHAR},
+      os_name = #{umsUserExtra.osName,jdbcType=VARCHAR},
+      os_version = #{umsUserExtra.osVersion,jdbcType=VARCHAR},
+      device_name = #{umsUserExtra.deviceName,jdbcType=VARCHAR},
+      device_id = #{umsUserExtra.deviceId,jdbcType=VARCHAR}
+    where id = #{umsUserExtra.id,jdbcType=BIGINT}
+  </update>
+</mapper>

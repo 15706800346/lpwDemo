@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <!-- 基本信息 -->
+  <description>SpringBoot 多模块构建</description>
+  <modelVersion>4.0.0</modelVersion>
+  <name>springboot-integration</name>
+  <packaging>pom</packaging>
+
+  <!-- 项目说明：这里作为聚合工程的父工程 -->
+  <groupId>com.huibur</groupId>
+  <artifactId>furion</artifactId>
+  <version>1.0.0.RELEASE</version>
+
+  <!-- 继承说明：这里继承SpringBoot提供的父工程 -->
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.3.0.RELEASE</version>
+  </parent>
+
+
+
+
+<dependencies>
+  <dependency>
+    <groupId>com.github.pagehelper</groupId>
+    <artifactId>pagehelper-spring-boot-starter</artifactId>
+    <version>1.2.12</version>
+  </dependency>
+  <dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-api</artifactId>
+    <version>0.11.2</version>
+    <scope>compile</scope>
+  </dependency>
+  <dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-impl</artifactId>
+    <version>0.11.2</version>
+    <scope>runtime</scope>
+    <optional>true</optional>
+  </dependency>
+  <dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-jackson</artifactId>
+    <version>0.11.2</version>
+    <scope>runtime</scope>
+  </dependency>
+
+</dependencies>
+
+
+  <!-- 模块说明：这里声明多个子模块 -->
+  <modules>
+    <module>main</module>
+    <module>user</module>
+    <module>common</module>
+    <module>core</module>
+  </modules>
+
+
+  <!-- 版本说明：这里统一管理依赖的版本号 -->
+<dependencyManagement>
+
+
+
+</dependencyManagement>
+
+
+
+
+
+
+  <profiles>
+    <profile>
+      <id>dev</id>
+      <properties>
+        <profileActive>dev</profileActive>
+      </properties>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+    </profile>
+    <profile>
+      <id>stg</id>
+      <properties>
+        <profileActive>stg</profileActive>
+      </properties>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+    </profile>
+    <profile>
+      <id>pro</id>
+      <properties>
+        <profileActive>pro</profileActive>
+      </properties>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+    </profile>
+  </profiles>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>11</source>
+          <target>11</target>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <skipTests>true</skipTests>    <!--默认关掉单元测试 -->
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
+

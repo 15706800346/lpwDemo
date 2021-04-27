@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.furion.user.mapper.UmsPostMapper">
+  <resultMap id="BaseResultMap" type="com.furion.user.model.dto.UmsPostDTO">
+    <id column="post_id" jdbcType="BIGINT" property="postId" />
+    <result column="post_code" jdbcType="VARCHAR" property="postCode" />
+    <result column="post_name" jdbcType="VARCHAR" property="postName" />
+    <result column="seq" jdbcType="INTEGER" property="seq" />
+    <result column="status" jdbcType="BIT" property="status" />
+    <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+    <result column="create_by" jdbcType="BIGINT" property="createBy" />
+    <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+    <result column="update_by" jdbcType="BIGINT" property="updateBy" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="tenant_id" jdbcType="BIGINT" property="tenantId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    post_id, post_code, post_name, seq, `status`, create_at, create_by, update_at, update_by,
+    remark, tenant_id
+  </sql>
+  <select id="selectUmsPostByPostId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from ums_post
+    where post_id = #{postId,jdbcType=BIGINT} and status !=1 and tenant_id = #{tenantId}
+  </select>
+  <select id="findByPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from ums_post where status !=1 and tenant_id = #{tenantId}
+  </select>
+  <update id="deleteUmsPostByPostId">
+    update ums_post
+     <set>
+       <if test="null != status">
+         status = #{status}
+       </if>
+     </set>
+    where  post_id = #{postId,jdbcType=BIGINT}
+  </update>
+  <insert id="insertAllUmsPost" keyColumn="post_id" keyProperty="postId" parameterType="com.furion.user.model.po.UmsPost" useGeneratedKeys="true">
+    insert into ums_post (post_code, post_name, seq,
+      `status`, create_at, create_by,
+      update_at, update_by, remark, tenant_id
+      )
+    values (#{umsPost.postCode,jdbcType=VARCHAR}, #{umsPost.postName,jdbcType=VARCHAR}
+    , #{umsPost.seq,jdbcType=INTEGER},
+      #{umsPost.status,jdbcType=BIT}, #{umsPost.createAt,jdbcType=TIMESTAMP}, #{umsPost.createBy,jdbcType=BIGINT},
+      #{umsPost.updateAt,jdbcType=TIMESTAMP}, #{umsPost.updateBy,jdbcType=BIGINT}, #{umsPost.remark,jdbcType=VARCHAR},
+      #{umsPost.tenantId,jdbcType=BIGINT}
+      )
+  </insert>
+<!--  <insert id="insertSelective" keyColumn="post_id" keyProperty="postId" parameterType="com.furion.user.model.po.UmsPost" useGeneratedKeys="true">-->
+<!--    insert into ums_post-->
+<!--    <trim prefix="(" suffix=")" suffixOverrides=",">-->
+<!--      <if test="postCode != null">-->
+<!--        post_code,-->
+<!--      </if>-->
+<!--      <if test="postName != null">-->
+<!--        post_name,-->
+<!--      </if>-->
+<!--      <if test="seq != null">-->
+<!--        seq,-->
+<!--      </if>-->
+<!--      <if test="status != null">-->
+<!--        `status`,-->
+<!--      </if>-->
+<!--      <if test="createAt != null">-->
+<!--        create_at,-->
+<!--      </if>-->
+<!--      <if test="createBy != null">-->
+<!--        create_by,-->
+<!--      </if>-->
+<!--      <if test="updateAt != null">-->
+<!--        update_at,-->
+<!--      </if>-->
+<!--      <if test="updateBy != null">-->
+<!--        update_by,-->
+<!--      </if>-->
+<!--      <if test="remark != null">-->
+<!--        remark,-->
+<!--      </if>-->
+<!--    </trim>-->
+<!--    <trim prefix="values (" suffix=")" suffixOverrides=",">-->
+<!--      <if test="postCode != null">-->
+<!--        #{postCode,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="postName != null">-->
+<!--        #{postName,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="seq != null">-->
+<!--        #{seq,jdbcType=INTEGER},-->
+<!--      </if>-->
+<!--      <if test="status != null">-->
+<!--        #{status,jdbcType=BIT},-->
+<!--      </if>-->
+<!--      <if test="createAt != null">-->
+<!--        #{createAt,jdbcType=TIMESTAMP},-->
+<!--      </if>-->
+<!--      <if test="createBy != null">-->
+<!--        #{createBy,jdbcType=BIGINT},-->
+<!--      </if>-->
+<!--      <if test="updateAt != null">-->
+<!--        #{updateAt,jdbcType=TIMESTAMP},-->
+<!--      </if>-->
+<!--      <if test="updateBy != null">-->
+<!--        #{updateBy,jdbcType=BIGINT},-->
+<!--      </if>-->
+<!--      <if test="remark != null">-->
+<!--        #{remark,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--    </trim>-->
+<!--  </insert>-->
+<!--  <update id="updateByPrimaryKeySelective" parameterType="com.furion.user.model.po.UmsPost">-->
+<!--    update ums_post-->
+<!--    <set>-->
+<!--      <if test="postCode != null">-->
+<!--        post_code = #{postCode,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="postName != null">-->
+<!--        post_name = #{postName,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="seq != null">-->
+<!--        seq = #{seq,jdbcType=INTEGER},-->
+<!--      </if>-->
+<!--      <if test="status != null">-->
+<!--        `status` = #{status,jdbcType=BIT},-->
+<!--      </if>-->
+<!--      <if test="createAt != null">-->
+<!--        create_at = #{createAt,jdbcType=TIMESTAMP},-->
+<!--      </if>-->
+<!--      <if test="createBy != null">-->
+<!--        create_by = #{createBy,jdbcType=BIGINT},-->
+<!--      </if>-->
+<!--      <if test="updateAt != null">-->
+<!--        update_at = #{updateAt,jdbcType=TIMESTAMP},-->
+<!--      </if>-->
+<!--      <if test="updateBy != null">-->
+<!--        update_by = #{updateBy,jdbcType=BIGINT},-->
+<!--      </if>-->
+<!--      <if test="remark != null">-->
+<!--        remark = #{remark,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--    </set>-->
+<!--    where post_id = #{postId,jdbcType=BIGINT}-->
+<!--  </update>-->
+<!--  <insert id="insertSelective" keyColumn="post_id" keyProperty="postId" parameterType="com.furion.user.model.po.UmsPost" useGeneratedKeys="true">-->
+<!--    insert into ums_post-->
+<!--    <trim prefix="(" suffix=")" suffixOverrides=",">-->
+<!--      <if test="postCode != null">-->
+<!--        post_code,-->
+<!--      </if>-->
+<!--      <if test="postName != null">-->
+<!--        post_name,-->
+<!--      </if>-->
+<!--      <if test="seq != null">-->
+<!--        seq,-->
+<!--      </if>-->
+<!--      <if test="status != null">-->
+<!--        `status`,-->
+<!--      </if>-->
+<!--      <if test="createAt != null">-->
+<!--        create_at,-->
+<!--      </if>-->
+<!--      <if test="createId != null">-->
+<!--        create_id,-->
+<!--      </if>-->
+<!--      <if test="updateAt != null">-->
+<!--        update_at,-->
+<!--      </if>-->
+<!--      <if test="updateBy != null">-->
+<!--        update_by,-->
+<!--      </if>-->
+<!--      <if test="remark != null">-->
+<!--        remark,-->
+<!--      </if>-->
+<!--    </trim>-->
+<!--    <trim prefix="values (" suffix=")" suffixOverrides=",">-->
+<!--      <if test="postCode != null">-->
+<!--        #{postCode,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="postName != null">-->
+<!--        #{postName,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="seq != null">-->
+<!--        #{seq,jdbcType=INTEGER},-->
+<!--      </if>-->
+<!--      <if test="status != null">-->
+<!--        #{status,jdbcType=BIT},-->
+<!--      </if>-->
+<!--      <if test="createAt != null">-->
+<!--        #{createAt,jdbcType=TIMESTAMP},-->
+<!--      </if>-->
+<!--      <if test="createId != null">-->
+<!--        #{createId,jdbcType=BIGINT},-->
+<!--      </if>-->
+<!--      <if test="updateAt != null">-->
+<!--        #{updateAt,jdbcType=TIMESTAMP},-->
+<!--      </if>-->
+<!--      <if test="updateBy != null">-->
+<!--        #{updateBy,jdbcType=BIGINT},-->
+<!--      </if>-->
+<!--      <if test="remark != null">-->
+<!--        #{remark,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--    </trim>-->
+<!--  </insert>-->
+<!--  <update id="updateByPrimaryKeySelective" parameterType="com.furion.user.model.po.UmsPost">-->
+<!--    update ums_post-->
+<!--    <set>-->
+<!--      <if test="postCode != null">-->
+<!--        post_code = #{postCode,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="postName != null">-->
+<!--        post_name = #{postName,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="seq != null">-->
+<!--        seq = #{seq,jdbcType=INTEGER},-->
+<!--      </if>-->
+<!--      <if test="status != null">-->
+<!--        `status` = #{status,jdbcType=BIT},-->
+<!--      </if>-->
+<!--      <if test="createAt != null">-->
+<!--        create_at = #{createAt,jdbcType=TIMESTAMP},-->
+<!--      </if>-->
+<!--      <if test="createId != null">-->
+<!--        create_id = #{createId,jdbcType=BIGINT},-->
+<!--      </if>-->
+<!--      <if test="updateAt != null">-->
+<!--        update_at = #{updateAt,jdbcType=TIMESTAMP},-->
+<!--      </if>-->
+<!--      <if test="updateBy != null">-->
+<!--        update_by = #{updateBy,jdbcType=BIGINT},-->
+<!--      </if>-->
+<!--      <if test="remark != null">-->
+<!--        remark = #{remark,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--    </set>-->
+<!--    where post_id = #{postId,jdbcType=BIGINT}-->
+<!--  </update>-->
+  <update id="updateUmsPostByPostId" parameterType="com.furion.user.model.po.UmsPost">
+    update ums_post
+    set post_code = #{umsPost.postCode,jdbcType=VARCHAR},
+      post_name = #{umsPost.postName,jdbcType=VARCHAR},
+      seq = #{umsPost.seq,jdbcType=INTEGER},
+      `status` = #{umsPost.status,jdbcType=BIT},
+      update_at = #{umsPost.updateAt,jdbcType=TIMESTAMP},
+      update_by = #{umsPost.updateBy,jdbcType=BIGINT},
+      remark = #{umsPost.remark,jdbcType=VARCHAR},
+      tenant_id = #{umsPost.tenantId,jdbcType=BIGINT}
+    where post_id = #{umsPost.postId,jdbcType=BIGINT}
+  </update>
+</mapper>

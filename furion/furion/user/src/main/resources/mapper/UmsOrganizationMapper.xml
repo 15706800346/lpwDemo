@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.furion.user.mapper.UmsOrganizationMapper">
+    <resultMap id="BaseResultMap" type="com.furion.user.model.po.UmsOrganization">
+        <id column="org_id" jdbcType="BIGINT" property="orgId"/>
+        <result column="org_name" jdbcType="VARCHAR" property="orgName"/>
+        <result column="parent_id" jdbcType="BIGINT" property="parentId"/>
+        <result column="org_code" jdbcType="VARCHAR" property="orgCode"/>
+        <result column="org_icon" jdbcType="VARCHAR" property="orgIcon"/>
+        <result column="seq" jdbcType="INTEGER" property="seq"/>
+        <result column="level" jdbcType="INTEGER" property="level"/>
+        <result column="org_route" jdbcType="VARCHAR" property="orgRoute"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="create_at" jdbcType="TIMESTAMP" property="createAt"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="update_at" jdbcType="TIMESTAMP" property="updateAt"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="status" jdbcType="BIT" property="status"/>
+        <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
+        <result column="tenant_id" jdbcType="BIGINT" property="tenantId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        org_id, org_name, parent_id, org_code, org_icon, seq, `level`, org_route, description,
+        create_at, create_by, update_at, update_by, `status`, remarks, tenant_id
+    </sql>
+    <select id="findByPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ums_organization where status != 1 and tenant_id = #{tenantId}
+    </select>
+    <select id="selectUmsOrganizationByOrgId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ums_organization
+        where org_id = #{orgId,jdbcType=BIGINT} and status != 1 and tenant_id = #{tenantId}
+    </select>
+    <update id="deleteUmsOrganizationByOrgId">
+        update ums_organization
+        <set>
+            <if test="status != null">
+                status = #{status}
+            </if>
+        </set>
+        where org_id = #{orgId,jdbcType=BIGINT}
+    </update>
+    <insert id="insertAllUmsOrganization" parameterType="com.furion.user.model.po.UmsOrganization">
+    insert into ums_organization (org_name, parent_id,
+      org_code, org_icon, seq, 
+      `level`, org_route, description, 
+      create_at, create_by, update_at, 
+      update_by, `status`, remarks, 
+      tenant_id)
+    values (
+     #{umsOrganization.orgName,jdbcType=BIGINT}
+    , #{umsOrganization.parentId,jdbcType=BIT},
+      #{umsOrganization.orgCode,jdbcType=VARCHAR}
+      , #{umsOrganization.orgIcon,jdbcType=VARCHAR}
+      , #{umsOrganization.seq,jdbcType=INTEGER},
+      #{umsOrganization.level,jdbcType=INTEGER}, #{umsOrganization.orgRoute,jdbcType=VARCHAR}, #{umsOrganization.description,jdbcType=VARCHAR},
+      #{umsOrganization.createAt,jdbcType=TIMESTAMP}, #{umsOrganization.createBy,jdbcType=BIGINT}, #{umsOrganization.updateAt,jdbcType=TIMESTAMP},
+      #{umsOrganization.updateBy,jdbcType=BIGINT}, #{umsOrganization.status,jdbcType=BIT}, #{umsOrganization.remarks,jdbcType=VARCHAR},
+      #{umsOrganization.tenantId,jdbcType=BIGINT})
+  </insert>
+<!--    <insert id="insertSelective" parameterType="com.furion.user.model.po.UmsOrganization">-->
+<!--        insert into ums_organization-->
+<!--        <trim prefix="(" suffix=")" suffixOverrides=",">-->
+<!--            <if test="orgId != null">-->
+<!--                org_id,-->
+<!--            </if>-->
+<!--            <if test="orgName != null">-->
+<!--                org_name,-->
+<!--            </if>-->
+<!--            <if test="parentId != null">-->
+<!--                parent_id,-->
+<!--            </if>-->
+<!--            <if test="orgCode != null">-->
+<!--                org_code,-->
+<!--            </if>-->
+<!--            <if test="orgIcon != null">-->
+<!--                org_icon,-->
+<!--            </if>-->
+<!--            <if test="seq != null">-->
+<!--                seq,-->
+<!--            </if>-->
+<!--            <if test="level != null">-->
+<!--                `level`,-->
+<!--            </if>-->
+<!--            <if test="orgRoute != null">-->
+<!--                org_route,-->
+<!--            </if>-->
+<!--            <if test="description != null">-->
+<!--                description,-->
+<!--            </if>-->
+<!--            <if test="createAt != null">-->
+<!--                create_at,-->
+<!--            </if>-->
+<!--            <if test="createBy != null">-->
+<!--                create_by,-->
+<!--            </if>-->
+<!--            <if test="updateAt != null">-->
+<!--                update_at,-->
+<!--            </if>-->
+<!--            <if test="updateBy != null">-->
+<!--                update_by,-->
+<!--            </if>-->
+<!--            <if test="status != null">-->
+<!--                `status`,-->
+<!--            </if>-->
+<!--            <if test="remarks != null">-->
+<!--                remarks,-->
+<!--            </if>-->
+<!--            <if test="tenantId != null">-->
+<!--                tenant_id,-->
+<!--            </if>-->
+<!--        </trim>-->
+<!--        <trim prefix="values (" suffix=")" suffixOverrides=",">-->
+<!--            <if test="orgId != null">-->
+<!--                #{orgId,jdbcType=BIGINT},-->
+<!--            </if>-->
+<!--            <if test="orgName != null">-->
+<!--                #{orgName,jdbcType=BIGINT},-->
+<!--            </if>-->
+<!--            <if test="parentId != null">-->
+<!--                #{parentId,jdbcType=BIT},-->
+<!--            </if>-->
+<!--            <if test="orgCode != null">-->
+<!--                #{orgCode,jdbcType=VARCHAR},-->
+<!--            </if>-->
+<!--            <if test="orgIcon != null">-->
+<!--                #{orgIcon,jdbcType=VARCHAR},-->
+<!--            </if>-->
+<!--            <if test="seq != null">-->
+<!--                #{seq,jdbcType=INTEGER},-->
+<!--            </if>-->
+<!--            <if test="level != null">-->
+<!--                #{level,jdbcType=INTEGER},-->
+<!--            </if>-->
+<!--            <if test="orgRoute != null">-->
+<!--                #{orgRoute,jdbcType=VARCHAR},-->
+<!--            </if>-->
+<!--            <if test="description != null">-->
+<!--                #{description,jdbcType=VARCHAR},-->
+<!--            </if>-->
+<!--            <if test="createAt != null">-->
+<!--                #{createAt,jdbcType=TIMESTAMP},-->
+<!--            </if>-->
+<!--            <if test="createBy != null">-->
+<!--                #{createBy,jdbcType=BIGINT},-->
+<!--            </if>-->
+<!--            <if test="updateAt != null">-->
+<!--                #{updateAt,jdbcType=TIMESTAMP},-->
+<!--            </if>-->
+<!--            <if test="updateBy != null">-->
+<!--                #{updateBy,jdbcType=BIGINT},-->
+<!--            </if>-->
+<!--            <if test="status != null">-->
+<!--                #{status,jdbcType=BIT},-->
+<!--            </if>-->
+<!--            <if test="remarks != null">-->
+<!--                #{remarks,jdbcType=VARCHAR},-->
+<!--            </if>-->
+<!--            <if test="tenantId != null">-->
+<!--                #{tenantId,jdbcType=BIGINT},-->
+<!--            </if>-->
+<!--        </trim>-->
+<!--    </insert>-->
+<!--    <update id="updateByPrimaryKeySelective" parameterType="com.furion.user.model.po.UmsOrganization">-->
+<!--        update ums_organization-->
+<!--        <set>-->
+<!--            <if test="orgName != null">-->
+<!--                org_name = #{orgName,jdbcType=BIGINT},-->
+<!--            </if>-->
+<!--            <if test="parentId != null">-->
+<!--                parent_id = #{parentId,jdbcType=BIT},-->
+<!--            </if>-->
+<!--            <if test="orgCode != null">-->
+<!--                org_code = #{orgCode,jdbcType=VARCHAR},-->
+<!--            </if>-->
+<!--            <if test="orgIcon != null">-->
+<!--                org_icon = #{orgIcon,jdbcType=VARCHAR},-->
+<!--            </if>-->
+<!--            <if test="seq != null">-->
+<!--                seq = #{seq,jdbcType=INTEGER},-->
+<!--            </if>-->
+<!--            <if test="level != null">-->
+<!--                `level` = #{level,jdbcType=INTEGER},-->
+<!--            </if>-->
+<!--            <if test="orgRoute != null">-->
+<!--                org_route = #{orgRoute,jdbcType=VARCHAR},-->
+<!--            </if>-->
+<!--            <if test="description != null">-->
+<!--                description = #{description,jdbcType=VARCHAR},-->
+<!--            </if>-->
+<!--            <if test="createAt != null">-->
+<!--                create_at = #{createAt,jdbcType=TIMESTAMP},-->
+<!--            </if>-->
+<!--            <if test="createBy != null">-->
+<!--                create_by = #{createBy,jdbcType=BIGINT},-->
+<!--            </if>-->
+<!--            <if test="updateAt != null">-->
+<!--                update_at = #{updateAt,jdbcType=TIMESTAMP},-->
+<!--            </if>-->
+<!--            <if test="updateBy != null">-->
+<!--                update_by = #{updateBy,jdbcType=BIGINT},-->
+<!--            </if>-->
+<!--            <if test="status != null">-->
+<!--                `status` = #{status,jdbcType=BIT},-->
+<!--            </if>-->
+<!--            <if test="remarks != null">-->
+<!--                remarks = #{remarks,jdbcType=VARCHAR},-->
+<!--            </if>-->
+<!--            <if test="tenantId != null">-->
+<!--                tenant_id = #{tenantId,jdbcType=BIGINT},-->
+<!--            </if>-->
+<!--        </set>-->
+<!--        where org_id = #{orgId,jdbcType=BIGINT}-->
+<!--    </update>-->
+    <update id="updateUmsOrganizationByOrgId" parameterType="com.furion.user.model.po.UmsOrganization">
+    update ums_organization
+    set org_name = #{umsOrganization.orgName,jdbcType=BIGINT},
+      parent_id = #{umsOrganization.parentId,jdbcType=BIT},
+      org_code = #{umsOrganization.orgCode,jdbcType=VARCHAR},
+      org_icon = #{umsOrganization.orgIcon,jdbcType=VARCHAR},
+      seq = #{umsOrganization.seq,jdbcType=INTEGER},
+      `level` = #{umsOrganization.level,jdbcType=INTEGER},
+      org_route = #{umsOrganization.orgRoute,jdbcType=VARCHAR},
+      description = #{umsOrganization.description,jdbcType=VARCHAR},
+      update_at = #{umsOrganization.updateAt,jdbcType=TIMESTAMP},
+      update_by = #{umsOrganization.updateBy,jdbcType=BIGINT},
+      `status` = #{umsOrganization.status,jdbcType=BIT},
+      remarks = #{umsOrganization.remarks,jdbcType=VARCHAR},
+      tenant_id = #{umsOrganization.tenantId,jdbcType=BIGINT}
+    where org_id = #{umsOrganization.orgId,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.furion.user.mapper.RelUserAuthMapper">
+  <resultMap id="BaseResultMap" type="com.furion.user.model.entity.RelUserAuth">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="auth_id" jdbcType="BIT" property="authId" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, user_id, auth_id
+  </sql>
+
+  <select id="getreluserbyid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from rel_user_auth
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <select id="findByPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from rel_user_auth
+  </select>
+
+  <insert id="addreluser" keyColumn="id" keyProperty="id" parameterType="com.furion.user.model.entity.RelUserAuth" useGeneratedKeys="true">
+
+    insert into rel_user_auth
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="relUserAuth.userId != null">
+        user_id,
+      </if>
+      <if test="relUserAuth.authId != null">
+        auth_id,
+      </if>
+    </trim>
+
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+
+      <if test="relUserAuth.userId != null">
+        #{relUserAuth.userId,jdbcType=BIGINT},
+      </if>
+      <if test="relUserAuth.authId != null">
+        #{relUserAuth.authId,jdbcType=BIGINT},
+      </if>
+    </trim>
+
+  </insert>
+
+  <update id="updatereluser" parameterType="com.furion.user.model.entity.RelUserAuth">
+    update rel_user_auth
+    <set>
+      <if test="relUserAuth.userId != null">
+        user_id=#{relUserAuth.userId},
+      </if>
+      <if test="relUserAuth.authId != null">
+        auth_id=#{relUserAuth.authId},
+      </if>
+    </set>
+    where id=#{relUserAuth.id}
+  </update>
+
+
+
+  <delete id="deletereluser" parameterType="com.furion.user.model.entity.RelUserAuth">
+        delete from  rel_user_auth where id=#{id}
+  </delete>
+
+</mapper>

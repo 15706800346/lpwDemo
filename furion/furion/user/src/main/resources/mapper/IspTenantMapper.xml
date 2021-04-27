@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.furion.user.mapper.IspTenantMapper">
+  <resultMap id="BaseResultMap" type="com.furion.user.model.dto.IspTenantDTO">
+    <id column="tenant_id" jdbcType="BIGINT" property="tenantId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+    <result column="create_by" jdbcType="BIGINT" property="createBy" />
+    <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+    <result column="update_by" jdbcType="BIGINT" property="updateBy" />
+    <result column="status" jdbcType="BIT" property="status" />
+    <result column="login_failed_count" jdbcType="BIT" property="loginFailedCount" />
+    <result column="login_failed_lock_interval" jdbcType="INTEGER" property="loginFailedLockInterval" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    tenant_id, `name`, create_at, create_by, update_at, update_by,
+    `status`, login_failed_count,
+    login_failed_lock_interval, remarks
+  </sql>
+  <select id="findByPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from isp_tenant where status  !=  1 and tenant_id = #{tenantId}
+  </select>
+
+  <select id="selectIspTenantByTenantId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from isp_tenant
+    where tenant_id = #{tenantId,jdbcType=BIGINT} and status != 1
+  </select>
+  <update id="deleteIspTenantByTenantId">
+    update isp_tenant
+    <set>
+      <if test="status != null">
+        status = #{status}
+      </if>
+    </set>
+    where tenant_id = #{tenantId,jdbcType=BIGINT}
+  </update>
+  <insert id="insertAllIspTenant" keyColumn="tenant_id" keyProperty="tenantId" parameterType="com.furion.user.model.dto.IspTenantDTO" useGeneratedKeys="true">
+    insert into isp_tenant (`name`, create_at, create_by, 
+      update_at, update_by, `status`, 
+      login_failed_count, login_failed_lock_interval, 
+      remarks)
+    values (#{ispTenant.name,jdbcType=VARCHAR}, #{ispTenant.createAt,jdbcType=TIMESTAMP}, #{ispTenant.createBy,jdbcType=BIGINT},
+      #{ispTenant.updateAt,jdbcType=TIMESTAMP}, #{ispTenant.updateBy,jdbcType=BIGINT}, #{ispTenant.status,jdbcType=BIT},
+      #{ispTenant.loginFailedCount,jdbcType=BIT}, #{ispTenant.loginFailedLockInterval,jdbcType=INTEGER},
+      #{ispTenant.remarks,jdbcType=VARCHAR})
+  </insert>
+<!--  <insert id="insertSelective" keyColumn="tenant_id" keyProperty="tenantId" parameterType="com.furion.user.model.po.IspTenant" useGeneratedKeys="true">-->
+<!--    insert into isp_tenant-->
+<!--    <trim prefix="(" suffix=")" suffixOverrides=",">-->
+<!--      <if test="name != null">-->
+<!--        `name`,-->
+<!--      </if>-->
+<!--      <if test="createAt != null">-->
+<!--        create_at,-->
+<!--      </if>-->
+<!--      <if test="createBy != null">-->
+<!--        create_by,-->
+<!--      </if>-->
+<!--      <if test="updateAt != null">-->
+<!--        update_at,-->
+<!--      </if>-->
+<!--      <if test="updateBy != null">-->
+<!--        update_by,-->
+<!--      </if>-->
+<!--      <if test="status != null">-->
+<!--        `status`,-->
+<!--      </if>-->
+<!--      <if test="loginFailedCount != null">-->
+<!--        login_failed_count,-->
+<!--      </if>-->
+<!--      <if test="loginFailedLockInterval != null">-->
+<!--        login_failed_lock_interval,-->
+<!--      </if>-->
+<!--      <if test="remarks != null">-->
+<!--        remarks,-->
+<!--      </if>-->
+<!--    </trim>-->
+<!--    <trim prefix="values (" suffix=")" suffixOverrides=",">-->
+<!--      <if test="name != null">-->
+<!--        #{name,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="createAt != null">-->
+<!--        #{createAt,jdbcType=TIMESTAMP},-->
+<!--      </if>-->
+<!--      <if test="createBy != null">-->
+<!--        #{createBy,jdbcType=BIGINT},-->
+<!--      </if>-->
+<!--      <if test="updateAt != null">-->
+<!--        #{updateAt,jdbcType=TIMESTAMP},-->
+<!--      </if>-->
+<!--      <if test="updateBy != null">-->
+<!--        #{updateBy,jdbcType=BIGINT},-->
+<!--      </if>-->
+<!--      <if test="status != null">-->
+<!--        #{status,jdbcType=BIT},-->
+<!--      </if>-->
+<!--      <if test="loginFailedCount != null">-->
+<!--        #{loginFailedCount,jdbcType=BIT},-->
+<!--      </if>-->
+<!--      <if test="loginFailedLockInterval != null">-->
+<!--        #{loginFailedLockInterval,jdbcType=INTEGER},-->
+<!--      </if>-->
+<!--      <if test="remarks != null">-->
+<!--        #{remarks,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--    </trim>-->
+<!--  </insert>-->
+<!--  <update id="updateByPrimaryKeySelective" parameterType="com.furion.user.model.po.IspTenant">-->
+<!--    update isp_tenant-->
+<!--    <set>-->
+<!--      <if test="name != null">-->
+<!--        `name` = #{name,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="createAt != null">-->
+<!--        create_at = #{createAt,jdbcType=TIMESTAMP},-->
+<!--      </if>-->
+<!--      <if test="createBy != null">-->
+<!--        create_by = #{createBy,jdbcType=BIGINT},-->
+<!--      </if>-->
+<!--      <if test="updateAt != null">-->
+<!--        update_at = #{updateAt,jdbcType=TIMESTAMP},-->
+<!--      </if>-->
+<!--      <if test="updateBy != null">-->
+<!--        update_by = #{updateBy,jdbcType=BIGINT},-->
+<!--      </if>-->
+<!--      <if test="status != null">-->
+<!--        `status` = #{status,jdbcType=BIT},-->
+<!--      </if>-->
+<!--      <if test="loginFailedCount != null">-->
+<!--        login_failed_count = #{loginFailedCount,jdbcType=BIT},-->
+<!--      </if>-->
+<!--      <if test="loginFailedLockInterval != null">-->
+<!--        login_failed_lock_interval = #{loginFailedLockInterval,jdbcType=INTEGER},-->
+<!--      </if>-->
+<!--      <if test="remarks != null">-->
+<!--        remarks = #{remarks,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--    </set>-->
+<!--    where tenant_id = #{tenantId,jdbcType=BIGINT}-->
+<!--  </update>-->
+  <update id="updateAllIspTenantByTenantId" parameterType="com.furion.user.model.dto.IspTenantDTO">
+    update isp_tenant
+    set `name` = #{ispTenant.name,jdbcType=VARCHAR},
+      update_at = #{ispTenant.updateAt,jdbcType=TIMESTAMP},
+      update_by = #{ispTenant.updateBy,jdbcType=BIGINT},
+      `status` = #{ispTenant.status,jdbcType=BIT},
+      login_failed_count = #{ispTenant.loginFailedCount,jdbcType=BIT},
+      login_failed_lock_interval = #{ispTenant.loginFailedLockInterval,jdbcType=INTEGER},
+      remarks = #{ispTenant.remarks,jdbcType=VARCHAR}
+    where tenant_id = #{ispTenant.tenantId,jdbcType=BIGINT}
+  </update>
+</mapper>

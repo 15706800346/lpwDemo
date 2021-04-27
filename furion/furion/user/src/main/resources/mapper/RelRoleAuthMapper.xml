@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.furion.user.mapper.RelRoleAuthMapper">
+  <resultMap id="BaseResultMap" type="com.furion.user.model.entity.RelRoleAuth">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="role_id" jdbcType="BIGINT" property="roleId" />
+    <result column="auth_id" jdbcType="BIGINT" property="authId" />
+  </resultMap>
+
+  <select id="getrelrolebyid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select * from rel_role_auth where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <select id="findByPage" resultMap="BaseResultMap">
+    select id,role_id,auth_id
+    from rel_role_auth
+  </select>
+
+  <insert id="addrelrole" keyColumn="id" keyProperty="id" parameterType="com.furion.user.model.entity.RelRoleAuth" useGeneratedKeys="true">
+
+    insert into rel_role_auth
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+    <if test="relRoleAuth.roleId != null">
+      role_id,
+    </if>
+    <if test="relRoleAuth.authId != null">
+      auth_id,
+    </if>
+    </trim>
+
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+
+    <if test="relRoleAuth.roleId != null">
+      #{relRoleAuth.roleId,jdbcType=BIGINT},
+    </if>
+    <if test="relRoleAuth.authId != null">
+      #{relRoleAuth.authId,jdbcType=BIGINT},
+    </if>
+    </trim>
+
+  </insert>
+
+  <update id="updaterelrole" parameterType="com.furion.user.model.entity.RelRoleAuth">
+    update rel_role_auth
+    <set>
+      <if test="relRoleAuth.roleId != null">
+        role_id=#{relRoleAuth.roleId},
+      </if>
+      <if test="relRoleAuth.authId != null">
+        auth_id=#{relRoleAuth.authId},
+      </if>
+    </set>
+    where id=#{relRoleAuth.id}
+  </update>
+
+  <delete id="deleterelrole" parameterType="com.furion.user.model.entity.RelRoleAuth">
+        delete from  rel_role_auth where id=#{id}
+    </delete>
+</mapper>

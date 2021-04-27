@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.furion.user.mapper.RelGroupUserMapper">
+  <resultMap id="BaseResultMap" type="com.furion.user.model.entity.RelGroupUser">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="group_id" jdbcType="BIGINT" property="groupId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, group_id, user_id
+  </sql>
+  <select id="getrelgroupbyid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from rel_group_user
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+
+  <select id="findByPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from rel_group_user
+  </select>
+
+
+  <insert id="addrelgroup" parameterType="com.furion.user.model.entity.RelGroupUser">
+    insert into rel_group_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="relGroupUser.groupId != null">
+        group_id,
+      </if>
+      <if test="relGroupUser.userId != null">
+        user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="relGroupUser.groupId != null">
+        #{relGroupUser.groupId,jdbcType=BIGINT},
+      </if>
+      <if test="relGroupUser.userId != null">
+        #{relGroupUser.userId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updaterelgroup" parameterType="com.furion.user.model.entity.RelGroupUser">
+    update rel_group_user
+    <set>
+      <if test="relGroupUser.groupId != null">
+        group_id = #{relGroupUser.groupId,jdbcType=BIGINT},
+      </if>
+      <if test="relGroupUser.userId != null">
+        user_id = #{relGroupUser.userId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{relGroupUser.id,jdbcType=BIGINT}
+  </update>
+
+
+  <delete id="deleterelgroup" parameterType="java.lang.Long">
+    delete from rel_group_user
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+</mapper>

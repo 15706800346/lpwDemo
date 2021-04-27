@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.furion.user.mapper.UmsDepartmentMapper">
+  <resultMap id="BaseResultMap" type="com.furion.user.model.dto.UmsDepartmentDTO">
+    <id column="dept_id" jdbcType="BIGINT" property="deptId" />
+    <result column="org_id" jdbcType="BIGINT" property="orgId" />
+    <result column="dept_name" jdbcType="BIGINT" property="deptName" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="dept_code" jdbcType="VARCHAR" property="deptCode" />
+    <result column="dept_icon" jdbcType="VARCHAR" property="deptIcon" />
+    <result column="seq" jdbcType="INTEGER" property="seq" />
+    <result column="level" jdbcType="INTEGER" property="level" />
+    <result column="dept_route" jdbcType="VARCHAR" property="deptRoute" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+    <result column="create_by" jdbcType="BIGINT" property="createBy" />
+    <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+    <result column="update_by" jdbcType="BIGINT" property="updateBy" />
+    <result column="status" jdbcType="BIT" property="status" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="tenant_id" jdbcType="BIGINT" property="tenantId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ums_department.dept_id as dept_id, ums_department.org_id as org_id, 
+    ums_department.dept_name as dept_name, ums_department.parent_id as parent_id, 
+    ums_department.dept_code as dept_code, ums_department.dept_icon as dept_icon, 
+    ums_department.seq as seq, ums_department.`level` as `level`, 
+    ums_department.dept_route as dept_route, ums_department.description as description, 
+    ums_department.create_at as create_at, ums_department.create_by as create_by, 
+    ums_department.update_at as update_at, ums_department.update_by as update_by, 
+    ums_department.`status` as `status`, ums_department.remarks as remarks, 
+    ums_department.tenant_id as tenant_id
+  </sql>
+  <select id="selectDepartmentByDepId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ums_department
+    where ums_department.dept_id = #{deptId,jdbcType=BIGINT} and status != 1 and ums_department.tenant_id = #{tenantId}
+  </select>
+
+  <select id="selectDepartmentByOrgnId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from ums_department
+    where ums_department.org_id = #{orgnId,jdbcType=BIGINT} and status != 1 and ums_department.tenant_id = #{tenantId}
+  </select>
+
+  <select id="selectUmsUserInfoByDeptCode" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from ums_department
+    where ums_department.dept_code = #{deptCode,jdbcType=BIGINT}
+    and status != 1 and ums_department.tenant_id = #{tenantId}
+  </select>
+
+  <select id="findByPage" resultMap="BaseResultMap">
+    select dept_id,org_id, dept_name, parent_id,
+      dept_code, dept_icon, seq,
+      `level`, dept_route, description,
+      create_at, create_by, update_at,
+      update_by, `status`, remarks,
+      tenant_id
+    from ums_department where status != 1 and tenant_id = #{tenantId}
+  </select>
+  <select id="selectAllDepartment" resultMap="BaseResultMap">
+    select dept_id,org_id, dept_name, parent_id,
+      dept_code, dept_icon, seq,
+      `level`, dept_route, description,
+      create_at, create_by, update_at,
+      update_by, `status`, remarks,
+      tenant_id
+    from ums_department where status != 1
+  </select>
+
+  <update id="deleteDepartmentByDepId">
+   update ums_department
+    <set>
+      <if test="status != null">
+        status = #{status}
+      </if>
+    </set>
+    where dept_id = #{deptId,jdbcType=BIGINT}
+  </update>
+  <insert id="insertAllUmsDepartment" keyColumn="dept_id" keyProperty="deptId" parameterType="com.furion.user.model.po.UmsDepartment" useGeneratedKeys="true">
+    insert into ums_department (org_id, dept_name, parent_id, 
+      dept_code, dept_icon, seq, 
+      `level`, dept_route, description, 
+      create_at, create_by, update_at, 
+      update_by, `status`, remarks, 
+      tenant_id)
+    values (#{umsDepartment.orgId,jdbcType=BIGINT}
+    , #{umsDepartment.deptName,jdbcType=BIGINT}
+    , #{umsDepartment.parentId,jdbcType=BIGINT},
+      #{umsDepartment.deptCode,jdbcType=VARCHAR}
+      , #{umsDepartment.deptIcon,jdbcType=VARCHAR}
+      , #{umsDepartment.seq,jdbcType=INTEGER},
+      #{umsDepartment.level,jdbcType=INTEGER}
+      , #{umsDepartment.deptRoute,jdbcType=VARCHAR}
+      , #{umsDepartment.description,jdbcType=VARCHAR},
+      #{umsDepartment.createAt,jdbcType=TIMESTAMP}, #{umsDepartment.createBy,jdbcType=BIGINT}, #{umsDepartment.updateAt,jdbcType=TIMESTAMP},
+      #{umsDepartment.updateBy,jdbcType=BIGINT}, #{umsDepartment.status,jdbcType=BIT}, #{umsDepartment.remarks,jdbcType=VARCHAR},
+      #{umsDepartment.tenantId,jdbcType=BIGINT})
+  </insert>
+
+
+<!--  <insert id="insertSelective" keyColumn="dept_id" keyProperty="deptId" parameterType="com.furion.user.model.po.UmsDepartment" useGeneratedKeys="true">-->
+<!--    insert into ums_department-->
+<!--    <trim prefix="(" suffix=")" suffixOverrides=",">-->
+<!--      <if test="orgId != null">-->
+<!--        org_id,-->
+<!--      </if>-->
+<!--      <if test="deptName != null">-->
+<!--        dept_name,-->
+<!--      </if>-->
+<!--      <if test="parentId != null">-->
+<!--        parent_id,-->
+<!--      </if>-->
+<!--      <if test="deptCode != null">-->
+<!--        dept_code,-->
+<!--      </if>-->
+<!--      <if test="deptIcon != null">-->
+<!--        dept_icon,-->
+<!--      </if>-->
+<!--      <if test="seq != null">-->
+<!--        seq,-->
+<!--      </if>-->
+<!--      <if test="level != null">-->
+<!--        `level`,-->
+<!--      </if>-->
+<!--      <if test="deptRoute != null">-->
+<!--        dept_route,-->
+<!--      </if>-->
+<!--      <if test="description != null">-->
+<!--        description,-->
+<!--      </if>-->
+<!--      <if test="createAt != null">-->
+<!--        create_at,-->
+<!--      </if>-->
+<!--      <if test="createBy != null">-->
+<!--        create_by,-->
+<!--      </if>-->
+<!--      <if test="updateAt != null">-->
+<!--        update_at,-->
+<!--      </if>-->
+<!--      <if test="updateBy != null">-->
+<!--        update_by,-->
+<!--      </if>-->
+<!--      <if test="status != null">-->
+<!--        `status`,-->
+<!--      </if>-->
+<!--      <if test="remarks != null">-->
+<!--        remarks,-->
+<!--      </if>-->
+<!--      <if test="tenantId != null">-->
+<!--        tenant_id,-->
+<!--      </if>-->
+<!--    </trim>-->
+<!--    <trim prefix="values (" suffix=")" suffixOverrides=",">-->
+<!--      <if test="orgId != null">-->
+<!--        #{orgId,jdbcType=BIGINT},-->
+<!--      </if>-->
+<!--      <if test="deptName != null">-->
+<!--        #{deptName,jdbcType=BIGINT},-->
+<!--      </if>-->
+<!--      <if test="parentId != null">-->
+<!--        #{parentId,jdbcType=BIGINT},-->
+<!--      </if>-->
+<!--      <if test="deptCode != null">-->
+<!--        #{deptCode,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="deptIcon != null">-->
+<!--        #{deptIcon,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="seq != null">-->
+<!--        #{seq,jdbcType=INTEGER},-->
+<!--      </if>-->
+<!--      <if test="level != null">-->
+<!--        #{level,jdbcType=INTEGER},-->
+<!--      </if>-->
+<!--      <if test="deptRoute != null">-->
+<!--        #{deptRoute,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="description != null">-->
+<!--        #{description,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="createAt != null">-->
+<!--        #{createAt,jdbcType=TIMESTAMP},-->
+<!--      </if>-->
+<!--      <if test="createBy != null">-->
+<!--        #{createBy,jdbcType=BIGINT},-->
+<!--      </if>-->
+<!--      <if test="updateAt != null">-->
+<!--        #{updateAt,jdbcType=TIMESTAMP},-->
+<!--      </if>-->
+<!--      <if test="updateBy != null">-->
+<!--        #{updateBy,jdbcType=BIGINT},-->
+<!--      </if>-->
+<!--      <if test="status != null">-->
+<!--        #{status,jdbcType=BIT},-->
+<!--      </if>-->
+<!--      <if test="remarks != null">-->
+<!--        #{remarks,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="tenantId != null">-->
+<!--        #{tenantId,jdbcType=BIGINT},-->
+<!--      </if>-->
+<!--    </trim>-->
+<!--  </insert>-->
+  <update id="updateDepartmentByDepId" parameterType="com.furion.user.model.dto.UmsDepartmentDTO">
+    update ums_department
+    <set>
+      <if test="orgId != null">
+        org_id = #{umsDepartment.orgId,jdbcType=BIGINT},
+      </if>
+      <if test="deptName != null">
+        dept_name = #{umsDepartment.deptName,jdbcType=BIGINT},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{umsDepartment.parentId,jdbcType=BIGINT},
+      </if>
+      <if test="deptCode != null">
+        dept_code = #{umsDepartment.deptCode,jdbcType=VARCHAR},
+      </if>
+      <if test="deptIcon != null">
+        dept_icon = #{umsDepartment.deptIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="seq != null">
+        seq = #{umsDepartment.seq,jdbcType=INTEGER},
+      </if>
+      <if test="level != null">
+        `level` = #{umsDepartment.level,jdbcType=INTEGER},
+      </if>
+      <if test="deptRoute != null">
+        dept_route = #{umsDepartment.deptRoute,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{umsDepartment.description,jdbcType=VARCHAR},
+      </if>
+      <if test="updateAt != null">
+        update_at = #{umsDepartment.updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{umsDepartment.updateBy,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        `status` = #{umsDepartment.status,jdbcType=BIT},
+      </if>
+      <if test="remarks != null">
+        remarks = #{umsDepartment.remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null">
+        tenant_id = #{umsDepartment.tenantId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where dept_id = #{umsDepartment.deptId,jdbcType=BIGINT}
+  </update>
+
+<!--  <update id="updateDepartmentByDepId" parameterType="com.furion.user.model.po.UmsDepartment">-->
+<!--    update ums_department-->
+<!--    set org_id = #{umsDepartment.orgId,jdbcType=BIGINT},-->
+<!--      dept_name = #{umsDepartment.deptName,jdbcType=BIGINT},-->
+<!--      parent_id = #{umsDepartment.parentId,jdbcType=BIGINT},-->
+<!--      dept_code = #{umsDepartment.deptCode,jdbcType=VARCHAR},-->
+<!--      dept_icon = #{umsDepartment.deptIcon,jdbcType=VARCHAR},-->
+<!--      seq = #{umsDepartment.seq,jdbcType=INTEGER},-->
+<!--      `level` = #{umsDepartment.level,jdbcType=INTEGER},-->
+<!--      dept_route = #{umsDepartment.deptRoute,jdbcType=VARCHAR},-->
+<!--      description = #{umsDepartment.description,jdbcType=VARCHAR},-->
+<!--      update_at = #{umsDepartment.updateAt,jdbcType=TIMESTAMP},-->
+<!--      update_by = #{umsDepartment.updateBy,jdbcType=BIGINT},-->
+<!--      `status` = #{umsDepartment.status,jdbcType=BIT},-->
+<!--      remarks = #{umsDepartment.remarks,jdbcType=VARCHAR},-->
+<!--      tenant_id = #{umsDepartment.tenantId,jdbcType=BIGINT}-->
+<!--    where dept_id = #{umsDepartment.deptId,jdbcType=BIGINT}-->
+<!--  </update>-->
+</mapper>

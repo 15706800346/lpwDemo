@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.furion.user.mapper.RelUserDeptMapper">
+  <resultMap id="BaseResultMap" type="com.furion.user.model.dto.RelUserOrgDTO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="dept_id" jdbcType="BIT" property="orgId" />
+  </resultMap>
+
+  <resultMap id="UmsOrganizationMap" type="com.furion.user.model.dto.UmsOrganizationDTO">
+    <id column="dept_id" jdbcType="BIGINT" property="orgId"/>
+    <result column="org_name" jdbcType="BIGINT" property="orgName"/>
+    <result column="parent_id" jdbcType="BIT" property="parentId"/>
+    <result column="org_code" jdbcType="VARCHAR" property="orgCode"/>
+    <result column="org_icon" jdbcType="VARCHAR" property="orgIcon"/>
+    <result column="seq" jdbcType="INTEGER" property="seq"/>
+    <result column="level" jdbcType="INTEGER" property="level"/>
+    <result column="org_route" jdbcType="VARCHAR" property="orgRoute"/>
+    <result column="description" jdbcType="VARCHAR" property="description"/>
+    <result column="create_at" jdbcType="TIMESTAMP" property="createAt"/>
+    <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+    <result column="update_at" jdbcType="TIMESTAMP" property="updateAt"/>
+    <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+    <result column="status" jdbcType="BIT" property="status"/>
+    <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
+    <result column="tenant_id" jdbcType="BIGINT" property="tenantId"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, user_id, dept_id
+  </sql>
+  <select id="selectRelUserOrgById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from rel_user_dept
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectUmsOrganizationByOrgId" parameterType="java.lang.Long" resultMap="UmsOrganizationMap">
+    select ums_organization.dept_id, ums_organization.org_name,
+    ums_organization.parent_id, ums_organization.org_code
+    , ums_organization.org_icon, ums_organization.seq, ums_organization.`level`, ums_organization.org_route, ums_organization.description,
+        ums_organization.create_at, ums_organization.create_by, ums_organization.update_at, ums_organization.update_by
+        , ums_organization.`status`, ums_organization.remarks, ums_organization.tenant_id
+    from ums_organization inner join rel_user_dept on rel_user_dept.dept_id = ums_organization.dept_id
+    where rel_user_dept.user_id = #{userId}
+    and status = 1
+  </select>
+  <select id="findByPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from rel_user_dept
+  </select>
+  <delete id="deleteRelUserOrgById" parameterType="java.lang.Long">
+    delete from rel_user_dept
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insertAllRelUserOrg" parameterType="com.furion.user.model.dto.RelUserOrgDTO">
+    insert into rel_user_dept ( user_id, dept_id)
+    values (#{relUserOrg.userId,jdbcType=BIGINT}, #{relUserOrg.orgId,jdbcType=BIT})
+  </insert>
+<!--  <insert id="insertSelective" parameterType="com.furion.user.model.po.RelUserOrg">-->
+<!--    insert into rel_user_dept-->
+<!--    <trim prefix="(" suffix=")" suffixOverrides=",">-->
+<!--      <if test="id != null">-->
+<!--        id,-->
+<!--      </if>-->
+<!--      <if test="userId != null">-->
+<!--        user_id,-->
+<!--      </if>-->
+<!--      <if test="orgId != null">-->
+<!--        dept_id,-->
+<!--      </if>-->
+<!--    </trim>-->
+<!--    <trim prefix="values (" suffix=")" suffixOverrides=",">-->
+<!--      <if test="id != null">-->
+<!--        #{id,jdbcType=BIGINT},-->
+<!--      </if>-->
+<!--      <if test="userId != null">-->
+<!--        #{userId,jdbcType=BIGINT},-->
+<!--      </if>-->
+<!--      <if test="orgId != null">-->
+<!--        #{orgId,jdbcType=BIT},-->
+<!--      </if>-->
+<!--    </trim>-->
+<!--  </insert>-->
+  <update id="updateAllRelUserOrgById" parameterType="com.furion.user.model.po.RelUserOrg">
+    update rel_user_dept
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="orgId != null">
+        dept_id = #{orgId,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateDeptIdByUserInfoUserId" parameterType="com.furion.user.model.dto.RelUserOrgDTO">
+    update rel_user_dept
+    set dept_id = #{deptId,jdbcType=BIGINT}
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+</mapper>

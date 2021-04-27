@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.furion.user.mapper.UmsAuthLoginDAO">
+  <resultMap id="BaseResultMap" type="com.furion.user.model.po.UmsAuthLogin">
+    <id column="auth_id" jdbcType="BIGINT" property="authId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="auth_type" jdbcType="BIT" property="authType" />
+    <result column="open_id" jdbcType="VARCHAR" property="openId" />
+    <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+    <result column="create_by" jdbcType="BIGINT" property="createBy" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    auth_id, user_id, auth_type, open_id, create_at, create_by, remarks
+  </sql>
+  <select id="findByPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from ums_auth_login
+  </select>
+  <select id="selectUmsAuthLoginByAuthId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from ums_auth_login
+    where auth_id = #{authId,jdbcType=BIGINT}
+  </select>
+  <update id="deleteUmsAuthLoginByAuthId">
+    update ums_auth_login
+    <set>
+      <if test="authType != null">
+        auth_type = #{authType}
+      </if>
+    </set>
+    where auth_id = #{authId,jdbcType=BIGINT}
+  </update>
+  <insert id="insertAllUmsAuthLogin" keyColumn="user_id" keyProperty="userId" parameterType="com.furion.user.model.po.UmsAuthLogin" useGeneratedKeys="true">
+    insert into ums_auth_login ( auth_type, open_id,
+      create_at, create_by, remarks
+      )
+    values (#{umsAuthLogin.authType,jdbcType=BIT}, #{umsAuthLogin.openId,jdbcType=VARCHAR},
+      #{umsAuthLogin.createAt,jdbcType=TIMESTAMP}, #{umsAuthLogin.createBy,jdbcType=BIGINT}, #{umsAuthLogin.remarks,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="user_id" keyProperty="userId" parameterType="com.furion.user.model.po.UmsAuthLogin" useGeneratedKeys="true">
+    insert into ums_auth_login
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="authType != null">
+        auth_type,
+      </if>
+      <if test="openId != null">
+        open_id,
+      </if>
+      <if test="createAt != null">
+        create_at,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="remarks != null">
+        remarks,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="authType != null">
+        #{authType,jdbcType=BIT},
+      </if>
+      <if test="openId != null">
+        #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null">
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=BIGINT},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.furion.user.model.po.UmsAuthLogin">
+    update ums_auth_login
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="authType != null">
+        auth_type = #{authType,jdbcType=BIT},
+      </if>
+      <if test="openId != null">
+        open_id = #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null">
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=BIGINT},
+      </if>
+      <if test="remarks != null">
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where auth_id = #{authId,jdbcType=BIGINT}
+  </update>
+  <update id="updateUmsAuthLoginByAuthId" parameterType="com.furion.user.model.po.UmsAuthLogin">
+    update ums_auth_login
+    set user_id = #{umsAuthLogin.userId,jdbcType=BIGINT},
+      auth_type = #{umsAuthLogin.authType,jdbcType=BIT},
+      open_id = #{umsAuthLogin.openId,jdbcType=VARCHAR},
+      remarks = #{umsAuthLogin.remarks,jdbcType=VARCHAR}
+    where auth_id = #{umsAuthLogin.authId,jdbcType=BIGINT}
+  </update>
+</mapper>

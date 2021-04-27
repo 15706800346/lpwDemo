@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.furion.user.mapper.UmsMutualAuthMapper">
+  <resultMap id="BaseResultMap" type="com.furion.user.model.entity.UmsMutualAuth">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="seq" jdbcType="INTEGER" property="seq" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+
+
+  <select id="getmutualbyid" resultType="com.furion.user.model.entity.UmsMutualAuth">
+        select * from ums_mutual_auth where id=#{id}
+  </select>
+
+  <select id="findByPage" resultType="com.furion.user.model.entity.UmsMutualAuth">
+    select id,role_id,name,parent_id,url,seq,type,status,remark
+    from ums_mutual_auth
+  </select>
+
+  <insert id="addmutual" keyColumn="id" keyProperty="id" parameterType="com.furion.user.model.entity.UmsMutualAuth" useGeneratedKeys="true">
+
+    insert into ums_mutual_auth
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="umsMutualAuth.roleId != null">
+        role_id,
+      </if>
+      <if test="umsMutualAuth.name != null">
+        name,
+      </if>
+      <if test="umsMutualAuth.parentId != null">
+        parent_id,
+      </if>
+      <if test="umsMutualAuth.description != null">
+        description,
+      </if>
+      <if test="umsMutualAuth.url != null">
+        url,
+      </if>
+      <if test="umsMutualAuth.seq != null">
+        seq,
+      </if>
+      <if test="umsMutualAuth.type != null">
+        type,
+      </if>
+      <if test="umsMutualAuth.status != null">
+        status,
+      </if>
+      <if test="umsMutualAuth.remark != null">
+        remark,
+      </if>
+    </trim>
+
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+
+      <if test="umsMutualAuth.roleId != null">
+        #{umsMutualAuth.roleId,jdbcType=INTEGER},
+      </if>
+      <if test="umsMutualAuth.name != null">
+        #{umsMutualAuth.name,jdbcType=VARCHAR},
+      </if>
+      <if test="umsMutualAuth.parentId != null">
+        #{umsMutualAuth.parentId,jdbcType=BIGINT},
+      </if>
+      <if test="umsMutualAuth.description != null">
+        #{umsMutualAuth.description,jdbcType=VARCHAR},
+      </if>
+      <if test="umsMutualAuth.url != null">
+        #{umsMutualAuth.url,jdbcType=VARCHAR},
+      </if>
+      <if test="umsMutualAuth.seq != null">
+        #{umsMutualAuth.seq,jdbcType=INTEGER},
+      </if>
+      <if test="umsMutualAuth.type != null">
+        #{umsMutualAuth.type,jdbcType=INTEGER},
+      </if>
+      <if test="umsMutualAuth.status != null">
+        #{umsMutualAuth.status,jdbcType=INTEGER},
+      </if>
+      <if test="umsMutualAuth.remark != null">
+        #{umsMutualAuth.remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+
+  </insert>
+
+
+
+  <update id="updatemutual" parameterType="com.furion.user.model.entity.UmsMutualAuth">
+    update ums_mutual_auth
+    <set>
+      <if test="umsMutualAuth.roleId != null">
+        role_id=#{umsMutualAuth.roleId},
+      </if>
+      <if test="umsMutualAuth.name != null and umsMutualAuth.name !=''">
+        name=#{umsMutualAuth.name},
+      </if>
+      <if test="umsMutualAuth.parentId != null">
+        parent_id=#{umsMutualAuth.parentId},
+      </if>
+      <if test="umsMutualAuth.description != null and umsMutualAuth.description !=''">
+        description=#{umsMutualAuth.description},
+      </if>
+      <if test="umsMutualAuth.url != null and umsMutualAuth.url !=''">
+        url=#{umsMutualAuth.url},
+      </if>
+      <if test="umsMutualAuth.seq != null and umsMutualAuth.seq !=''">
+        seq=#{umsMutualAuth.seq},
+      </if>
+      <if test="umsMutualAuth.type != null and umsMutualAuth.type !=''">
+        type=#{umsMutualAuth.type},
+      </if>
+      <if test="umsMutualAuth.status != null and umsMutualAuth.status !=''">
+        status=#{umsMutualAuth.status},
+      </if>
+      <if test="umsMutualAuth.remark != null and umsMutualAuth.remark !=''">
+        remark=#{umsMutualAuth.remark},
+      </if>
+    </set>
+    where id=#{umsMutualAuth.id}
+  </update>
+
+
+  <delete id="deletemutual" parameterType="com.furion.user.model.entity.UmsMutualAuth">
+        delete from  ums_mutual_auth where id=#{id}
+  </delete>
+
+</mapper>

@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.furion.user.mapper.UmsUserInfoMapper">
+  <resultMap id="BaseResultMap" type="com.furion.user.model.dto.UmsUserInfoDTO">
+    <id column="user_info_id" jdbcType="BIGINT" property="userInfoId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="realname" jdbcType="VARCHAR" property="realname" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="race" jdbcType="INTEGER" property="race" />
+    <result column="gender" jdbcType="BIT" property="gender" />
+    <result column="birth" jdbcType="TIMESTAMP" property="birth" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="identity_type" jdbcType="BIT" property="identityType" />
+    <result column="identity_no" jdbcType="VARCHAR" property="identityNo" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="avatar_url" jdbcType="VARCHAR" property="avatarUrl" />
+    <result column="fax" jdbcType="VARCHAR" property="fax" />
+    <result column="telephone" jdbcType="VARCHAR" property="telephone" />
+    <result column="signature" jdbcType="VARCHAR" property="signature" />
+    <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+    <result column="create_by" jdbcType="BIGINT" property="createBy" />
+    <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+    <result column="update_by" jdbcType="BIGINT" property="updateBy" />
+    <result column="status" jdbcType="BIGINT" property="status" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ums_user_info.user_info_id, ums_user_info.user_id, ums_user_info.realname, ums_user_info.nickname, ums_user_info.race
+    , ums_user_info.gender, ums_user_info.birth, ums_user_info.mobile, ums_user_info.identity_type,
+    ums_user_info.identity_no, ums_user_info.email, ums_user_info.avatar_url, ums_user_info.fax, ums_user_info.telephone, ums_user_info.signature, ums_user_info.create_at, ums_user_info.create_by,
+    ums_user_info.update_at, ums_user_info.update_by
+  </sql>
+  <select id="findByPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from ums_user_info
+  </select>
+
+  <select id="selectUmsUserInfoByUserInfoId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />,ums_user_login.status
+    from ums_user_info left join ums_user_login on ums_user_info.user_id = ums_user_login.user_id
+    where user_info_id = #{userInfoId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectUserInfoByDepIdAndNameAndStatus" resultMap="BaseResultMap">
+    select    <include refid="Base_Column_List" />,ums_user_login.status
+    FROM
+    ums_user_info left join
+    ums_user_login on ums_user_info.user_id = ums_user_login.user_id left join rel_user_dept on
+    ums_user_info.user_id = rel_user_dept.user_id left
+    join ums_department on rel_user_dept.dept_id = ums_department.dept_id where 1=1
+    <if test="param.nickname != null">
+     and ums_user_info.nickname like Concat(Concat('%',#{param.nickname},'%'))
+    </if>
+    <if test="param.status != null">
+    and ums_user_login.STATUS = #{param.status}
+    </if>
+    <if test="param.deptId != null">
+      and ums_department.dept_id = #{param.deptId}
+    </if>
+  </select>
+
+  <select id="selectUmsUserInfoByMobile" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from ums_user_info,ums_user_login where ums_user_login.user_id=ums_user_info.user_id
+     and ums_user_login.tenant_id = #{tenantId} and ums_user_info.mobile = #{mobile}
+  </select>
+  <resultMap id="userInfo" type="com.furion.user.model.dto.UmsUserInfoDTO">
+    <id column="user_info_id" jdbcType="BIGINT" property="userInfoId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="realname" jdbcType="VARCHAR" property="realname" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="race" jdbcType="INTEGER" property="race" />
+    <result column="gender" jdbcType="BIT" property="gender" />
+    <result column="birth" jdbcType="TIMESTAMP" property="birth" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="identity_type" jdbcType="BIT" property="identityType" />
+    <result column="identity_no" jdbcType="VARCHAR" property="identityNo" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="avatar_url" jdbcType="VARCHAR" property="avatarUrl" />
+    <result column="fax" jdbcType="VARCHAR" property="fax" />
+    <result column="telephone" jdbcType="VARCHAR" property="telephone" />
+    <result column="signature" jdbcType="VARCHAR" property="signature" />
+    <collection property="roleList" resultMap="roleInfo" ofType="com.furion.user.model.dto.UmsRoleDTO">
+
+    </collection>
+  </resultMap>
+
+  <resultMap id="roleInfo" type="com.furion.user.model.dto.UmsRoleDTO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="seq" jdbcType="INTEGER" property="seq" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+    <result column="create_by" jdbcType="BIGINT" property="createBy" />
+    <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+    <result column="update_by" jdbcType="BIGINT" property="updateBy" />
+    <result column="is_fixed" jdbcType="INTEGER" property="isFixed" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+    <collection property="authList" resultMap="authInfo" ofType="com.furion.user.model.dto.UmsAuthDTO"/>
+  </resultMap>
+
+  <resultMap id="authInfo" type="com.furion.user.model.dto.UmsAuthDTO">
+    <id column="authId" jdbcType="BIGINT" property="id" />
+    <result column="authName" jdbcType="VARCHAR" property="name" />
+    <result column="authParentId" jdbcType="BIGINT" property="parentId" />
+    <result column="authSeq" jdbcType="INTEGER" property="seq" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="authUrl" jdbcType="INTEGER" property="url" />
+    <result column="authType"  property="type" />
+    <result column="authIdStatus"  property="status" />
+    <result column="authDescription"  property="description" />
+    <result column="authRemarks"  property="remarks" />
+    <collection property="children" select="getChildren" column="authId"/>
+  </resultMap>
+
+  <select id="getChildren" resultMap="authInfo">
+    select auth.id as authId, auth.name as authName, auth.parent_id as authParentId, auth.url as authUrl,
+    auth.seq as authSeq , auth.type as authType, auth.status as authIdStatus, auth.description as authDescription, remarks AS authRemarks
+    from ums_auth as auth where parent_id = #{authId}
+  </select>
+
+  <select id="selectUmsUserInfoByUserId" resultMap="userInfo">
+    SELECT userInfo.*,ums_role.*,ums_post.post_name,ums_department.dept_name,
+    auth.id as authId, auth.name as authName, auth.parent_id as authParentId, auth.url as authUrl,
+    auth.seq as authSeq , auth.type as authType, auth.status as authIdStatus, auth.description as authDescription,
+     auth.remarks AS authRemarks
+    from ums_user_info as userInfo
+
+    LEFT JOIN rel_user_role as userRole on userInfo.user_id  = userRole.user_id
+
+    left join ums_role  on userRole.role_id = ums_role.id
+
+    left join rel_role_auth as roleAuth on roleAuth.role_id = ums_role.id
+
+    left join ums_auth as auth on auth.id = roleAuth.auth_id
+
+    left join rel_user_dept on rel_user_dept.user_id = userInfo.user_id
+    left join ums_department on ums_department.dept_id = rel_user_dept.dept_id
+    left join rel_user_post on rel_user_post.user_id = userInfo.user_id
+    left join ums_post on ums_post.post_id = rel_user_post.post_id
+    where auth.parent_id = 0 and userInfo.user_id = #{userId}
+
+  </select>
+
+  <delete id="deleteUmsUserInfoByUserInfoId">
+    delete  from ums_user_info
+    where user_info_id = #{userInfoId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insertAlluserInfoDTO" keyColumn="user_id" keyProperty="userId" parameterType="com.furion.user.model.dto.UmsUserInfoDTO" useGeneratedKeys="true">
+    insert into ums_user_info (
+    user_id,
+    realname, nickname,
+      race, gender, birth,
+      mobile, identity_type, identity_no,
+      email, avatar_url, fax,
+      telephone, signature, create_at,
+      create_by, update_at, update_by
+      )
+    values (#{userInfoDTO.userId},#{userInfoDTO.realname,jdbcType=VARCHAR}, #{userInfoDTO.nickname,jdbcType=VARCHAR},
+      #{userInfoDTO.race,jdbcType=INTEGER}, #{userInfoDTO.gender,jdbcType=BIT}, #{userInfoDTO.birth,jdbcType=TIMESTAMP},
+      #{userInfoDTO.mobile,jdbcType=VARCHAR}, #{userInfoDTO.identityType,jdbcType=BIT}, #{userInfoDTO.identityNo,jdbcType=VARCHAR},
+      #{userInfoDTO.email,jdbcType=VARCHAR}, #{userInfoDTO.avatarUrl,jdbcType=VARCHAR}, #{userInfoDTO.fax,jdbcType=VARCHAR},
+      #{userInfoDTO.telephone,jdbcType=VARCHAR}, #{userInfoDTO.signature,jdbcType=VARCHAR}, #{userInfoDTO.createAt,jdbcType=TIMESTAMP},
+      #{userInfoDTO.createBy,jdbcType=BIGINT}, #{userInfoDTO.updateAt,jdbcType=TIMESTAMP}, #{userInfoDTO.updateBy,jdbcType=BIGINT}
+      )
+
+  </insert>
+<!--  <insert id="insertSelective" keyColumn="user_id" keyProperty="userId" parameterType="com.furion.user.model.po.UmsUserInfo" useGeneratedKeys="true">-->
+<!--    insert into ums_user_info-->
+<!--    <trim prefix="(" suffix=")" suffixOverrides=",">-->
+<!--      <if test="userInfoId != null">-->
+<!--        user_info_id,-->
+<!--      </if>-->
+<!--      <if test="realname != null">-->
+<!--        realname,-->
+<!--      </if>-->
+<!--      <if test="nickname != null">-->
+<!--        nickname,-->
+<!--      </if>-->
+<!--      <if test="race != null">-->
+<!--        race,-->
+<!--      </if>-->
+<!--      <if test="gender != null">-->
+<!--        gender,-->
+<!--      </if>-->
+<!--      <if test="birth != null">-->
+<!--        birth,-->
+<!--      </if>-->
+<!--      <if test="mobile != null">-->
+<!--        mobile,-->
+<!--      </if>-->
+<!--      <if test="identityType != null">-->
+<!--        identity_type,-->
+<!--      </if>-->
+<!--      <if test="identityNo != null">-->
+<!--        identity_no,-->
+<!--      </if>-->
+<!--      <if test="email != null">-->
+<!--        email,-->
+<!--      </if>-->
+<!--      <if test="avatarUrl != null">-->
+<!--        avatar_url,-->
+<!--      </if>-->
+<!--      <if test="fax != null">-->
+<!--        fax,-->
+<!--      </if>-->
+<!--      <if test="telephone != null">-->
+<!--        telephone,-->
+<!--      </if>-->
+<!--      <if test="signature != null">-->
+<!--        signature,-->
+<!--      </if>-->
+<!--      <if test="createAt != null">-->
+<!--        create_at,-->
+<!--      </if>-->
+<!--      <if test="createBy != null">-->
+<!--        create_by,-->
+<!--      </if>-->
+<!--      <if test="updateAt != null">-->
+<!--        update_at,-->
+<!--      </if>-->
+<!--      <if test="updateBy != null">-->
+<!--        update_by,-->
+<!--      </if>-->
+<!--    </trim>-->
+<!--    <trim prefix="values (" suffix=")" suffixOverrides=",">-->
+<!--      <if test="userInfoId != null">-->
+<!--        #{userInfoId,jdbcType=BIGINT},-->
+<!--      </if>-->
+<!--      <if test="realname != null">-->
+<!--        #{realname,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="nickname != null">-->
+<!--        #{nickname,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="race != null">-->
+<!--        #{race,jdbcType=INTEGER},-->
+<!--      </if>-->
+<!--      <if test="gender != null">-->
+<!--        #{gender,jdbcType=BIT},-->
+<!--      </if>-->
+<!--      <if test="birth != null">-->
+<!--        #{birth,jdbcType=TIMESTAMP},-->
+<!--      </if>-->
+<!--      <if test="mobile != null">-->
+<!--        #{mobile,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="identityType != null">-->
+<!--        #{identityType,jdbcType=BIT},-->
+<!--      </if>-->
+<!--      <if test="identityNo != null">-->
+<!--        #{identityNo,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="email != null">-->
+<!--        #{email,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="avatarUrl != null">-->
+<!--        #{avatarUrl,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="fax != null">-->
+<!--        #{fax,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="telephone != null">-->
+<!--        #{telephone,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="signature != null">-->
+<!--        #{signature,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="createAt != null">-->
+<!--        #{createAt,jdbcType=TIMESTAMP},-->
+<!--      </if>-->
+<!--      <if test="createBy != null">-->
+<!--        #{createBy,jdbcType=BIGINT},-->
+<!--      </if>-->
+<!--      <if test="updateAt != null">-->
+<!--        #{updateAt,jdbcType=TIMESTAMP},-->
+<!--      </if>-->
+<!--      <if test="updateBy != null">-->
+<!--        #{updateBy,jdbcType=BIGINT},-->
+<!--      </if>-->
+<!--    </trim>-->
+<!--  </insert>-->
+  <update id="updateUmsUserInfoByUserInfoId" parameterType="com.furion.user.model.dto.UmsUserInfoDTO">
+    update ums_user_info
+    <set>
+      <if test="userInfoDTO.realname != null">
+        realname = #{userInfoDTO.realname,jdbcType=VARCHAR},
+      </if>
+      <if test="userInfoDTO.nickname != null">
+        nickname = #{userInfoDTO.nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="userInfoDTO.race != null">
+        race = #{userInfoDTO.race,jdbcType=INTEGER},
+      </if>
+      <if test="userInfoDTO.gender != null">
+        gender = #{userInfoDTO.gender,jdbcType=BIT},
+      </if>
+      <if test="userInfoDTO.birth != null">
+        birth = #{userInfoDTO.birth,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userInfoDTO.mobile != null">
+        mobile = #{userInfoDTO.mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="userInfoDTO.identityType != null">
+        identity_type = #{userInfoDTO.identityType,jdbcType=BIT},
+      </if>
+      <if test="userInfoDTO.identityNo != null">
+        identity_no = #{userInfoDTO.identityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="userInfoDTO.email != null">
+        email = #{userInfoDTO.email,jdbcType=VARCHAR},
+      </if>
+      <if test="userInfoDTO.avatarUrl != null">
+        avatar_url = #{userInfoDTO.avatarUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="userInfoDTO.fax != null">
+        fax = #{userInfoDTO.fax,jdbcType=VARCHAR},
+      </if>
+      <if test="userInfoDTO.telephone != null">
+        telephone = #{userInfoDTO.telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="userInfoDTO.signature != null">
+        signature = #{userInfoDTO.signature,jdbcType=VARCHAR},
+      </if>
+      <if test="userInfoDTO.updateAt != null">
+        update_at = #{userInfoDTO.updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userInfoDTO.updateBy != null">
+        update_by = #{userInfoDTO.updateBy,jdbcType=BIGINT},
+      </if>
+    </set>
+    where user_info_id = #{userInfoDTO.userInfoId,jdbcType=BIGINT}
+  </update>
+<!--  <update id="updateUmsUserInfoByUserInfoId" parameterType="com.furion.user.model.po.UmsUserInfo">-->
+<!--    update ums_user_info-->
+<!--    set user_id = #{umsUserInfo.userId,jdbcType=BIGINT},-->
+<!--      realname = #{umsUserInfo.realname,jdbcType=VARCHAR},-->
+<!--      nickname = #{umsUserInfo.nickname,jdbcType=VARCHAR},-->
+<!--      race = #{umsUserInfo.race,jdbcType=INTEGER},-->
+<!--      gender = #{umsUserInfo.gender,jdbcType=BIT},-->
+<!--      birth = #{umsUserInfo.birth,jdbcType=TIMESTAMP},-->
+<!--      mobile = #{umsUserInfo.mobile,jdbcType=VARCHAR},-->
+<!--      identity_type = #{umsUserInfo.identityType,jdbcType=BIT},-->
+<!--      identity_no = #{umsUserInfo.identityNo,jdbcType=VARCHAR},-->
+<!--      email = #{umsUserInfo.email,jdbcType=VARCHAR},-->
+<!--      avatar_url = #{umsUserInfo.avatarUrl,jdbcType=VARCHAR},-->
+<!--      fax = #{umsUserInfo.fax,jdbcType=VARCHAR},-->
+<!--      telephone = #{umsUserInfo.telephone,jdbcType=VARCHAR},-->
+<!--      signature = #{umsUserInfo.signature,jdbcType=VARCHAR},-->
+<!--      update_at = #{umsUserInfo.updateAt,jdbcType=TIMESTAMP},-->
+<!--      update_by = #{umsUserInfo.updateBy,jdbcType=BIGINT}-->
+<!--    where user_info_id = #{umsUserInfo.userInfoId,jdbcType=BIGINT}-->
+<!--  </update>-->
+</mapper>

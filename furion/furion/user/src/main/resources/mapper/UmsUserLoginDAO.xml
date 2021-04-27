@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.furion.user.login.mapper.UmsUserLoginMapper">
+  <resultMap id="BaseResultMap" type="com.furion.user.login.dto.LoginUserDTO">
+    <id column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+    <result column="create_by" jdbcType="BIGINT" property="createBy" />
+    <result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+    <result column="update_by" jdbcType="BIGINT" property="updateBy" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="salt" jdbcType="VARCHAR" property="salt" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="login_failed_count" jdbcType="TINYINT" property="loginFailedCount" />
+    <result column="login_release_time" jdbcType="TIMESTAMP" property="loginReleaseTime" />
+    <result column="tenant_id" jdbcType="BIGINT" property="tenantId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ums_user_login.user_id as user_id, ums_user_login.user_name as user_name, 
+    ums_user_login.create_at as create_at, ums_user_login.create_by as create_by, 
+    ums_user_login.update_at as update_at, ums_user_login.update_by as update_by, 
+    ums_user_login.`status` as `status`, ums_user_login.salt as salt, 
+    ums_user_login.`password` as `password`, ums_user_login.login_failed_count as login_failed_count, 
+    ums_user_login.login_release_time as login_release_time, ums_user_login.tenant_id as tenant_id
+  </sql>
+
+
+  <update id="updateAllUmsUserLoginById" parameterType="com.furion.user.login.dto.LoginUserDTO">
+    update ums_user_login
+    <set>
+      <if test="umsUserLogin.userName != null">
+        user_name = #{umsUserLogin.userName,jdbcType=VARCHAR},
+      </if>
+      <if test="umsUserLogin.createAt != null">
+        create_at = #{umsUserLogin.createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="umsUserLogin.createBy != null">
+        create_by = #{umsUserLogin.createBy,jdbcType=BIGINT},
+      </if>
+      <if test="umsUserLogin.updateAt != null">
+        update_at = #{umsUserLogin.updateAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="umsUserLogin.updateBy != null">
+        create_by = #{umsUserLogin.updateBy,jdbcType=BIGINT},
+      </if>
+      <if test="umsUserLogin.status != null">
+        status = #{umsUserLogin.status,jdbcType=TINYINT},
+      </if>
+      <if test="umsUserLogin.salt != null">
+        salt = #{umsUserLogin.salt,jdbcType=VARCHAR},
+      </if>
+      <if test="umsUserLogin.password != null">
+        password = #{umsUserLogin.password,jdbcType=VARCHAR},
+      </if>
+      <if test="umsUserLogin.loginFailedCount != null">
+        login_failed_count = #{umsUserLogin.loginFailedCount,jdbcType=TINYINT},
+      </if>
+      <if test="umsUserLogin.loginReleaseTime != null">
+        login_release_time = #{umsUserLogin.loginReleaseTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="umsUserLogin.tenantId != null">
+        tenant_id = #{umsUserLogin.tenantId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where user_id = #{umsUserLogin.userId,jdbcType=BIGINT}
+  </update>
+
+  <update id="editStatusByTenantId" >
+    update ums_user_login set status = #{status} where tenant_id = #{tenantId}
+  </update>
+
+  <update id="editFailedCount">
+    update ums_user_login set login_failed_count = login_failed_count - 1
+    where user_id = #{userId}
+  </update>
+  <update id="editFailedTime">
+    update ums_user_login ,
+        (   select login_failed_count
+            from isp_tenant
+            where tenant_id = #{user.tenantId}
+        ) isp_tenant
+
+    set ums_user_login.login_failed_count = isp_tenant.login_failed_count
+    <if test="user.loginReleaseTime != null and user.loginReleaseTime!=''">
+      , ums_user_login.login_release_time = #{user.loginReleaseTime}
+    </if>
+    where ums_user_login.user_id = #{user.userId}
+  </update>
+  <update id="deleteUmsUserLoginById">
+    update ums_user_login set status = 1 where tenant_id = #{tenantId}
+  </update>
+  <select id="getUserByUsername" resultType="com.furion.user.login.mapper.UmsUserLoginDTO">
+   select user_id, user_name, user_name,password,ums_user_login.status,ums_user_login.tenant_id,ums_user_login.login_failed_count,
+   isp_tenant.login_failed_lock_interval
+     from ums_user_login
+    inner join isp_tenant on ums_user_login.tenant_id = isp_tenant.tenant_id
+    where ums_user_login.user_name = #{username}
+  </select>
+
+<!--  <select id="selectAllUmsUserLogin" resultMap="BaseResultMap">-->
+<!--    select-->
+<!--    <include refid="Base_Column_List" />-->
+<!--    from ums_user_login-->
+<!--  </select>-->
+
+<!--  <select id="selectUmsUserLoginByUserInfoId" parameterType="java.lang.Long" resultMap="BaseResultMap">-->
+<!--    select-->
+<!--    <include refid="Base_Column_List" />-->
+<!--    from ums_user_login-->
+<!--    where user_id = #{userId,jdbcType=BIGINT}-->
+<!--  </select>-->
+
+  <update id="deleteUmsUserLoginByUserId">
+    update ums_user_login
+    <set>
+      <if test="status != null">
+        status = #{status}
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  <insert id="insertAllUmsUserLogin" keyColumn="user_id" keyProperty="userId" parameterType="com.furion.user.login.dto.LoginUserDTO" useGeneratedKeys="true">
+    insert into ums_user_login (user_name, create_at, create_by, 
+      update_at, update_by, `status`, 
+      salt, `password`, login_failed_count, 
+      login_release_time, tenant_id)
+    values (#{umsUserLogin.userName,jdbcType=VARCHAR}, #{umsUserLogin.createAt,jdbcType=TIMESTAMP}, #{umsUserLogin.createBy,jdbcType=BIGINT},
+      #{umsUserLogin.updateAt,jdbcType=TIMESTAMP}, #{umsUserLogin.updateBy,jdbcType=BIGINT}, #{umsUserLogin.status,jdbcType=TINYINT},
+      #{umsUserLogin.salt,jdbcType=VARCHAR}, #{umsUserLogin.password,jdbcType=VARCHAR}, #{umsUserLogin.loginFailedCount,jdbcType=TINYINT},
+      #{umsUserLogin.loginReleaseTime,jdbcType=TIMESTAMP}, #{umsUserLogin.tenantId,jdbcType=BIGINT})
+  </insert>
+<!--  <insert id="insertSelective" keyColumn="user_id" keyProperty="userId" parameterType="com.furion.user.login.dto.LoginUserDTO" useGeneratedKeys="true">-->
+<!--    insert into ums_user_login-->
+<!--    <trim prefix="(" suffix=")" suffixOverrides=",">-->
+<!--      <if test="userName != null">-->
+<!--        user_name,-->
+<!--      </if>-->
+<!--      <if test="createAt != null">-->
+<!--        create_at,-->
+<!--      </if>-->
+<!--      <if test="createBy != null">-->
+<!--        create_by,-->
+<!--      </if>-->
+<!--      <if test="updateAt != null">-->
+<!--        update_at,-->
+<!--      </if>-->
+<!--      <if test="updateBy != null">-->
+<!--        update_by,-->
+<!--      </if>-->
+<!--      <if test="status != null">-->
+<!--        `status`,-->
+<!--      </if>-->
+<!--      <if test="salt != null">-->
+<!--        salt,-->
+<!--      </if>-->
+<!--      <if test="password != null">-->
+<!--        `password`,-->
+<!--      </if>-->
+<!--      <if test="loginFailedCount != null">-->
+<!--        login_failed_count,-->
+<!--      </if>-->
+<!--      <if test="loginReleaseTime != null">-->
+<!--        login_release_time,-->
+<!--      </if>-->
+<!--      <if test="tenantId != null">-->
+<!--        tenant_id,-->
+<!--      </if>-->
+<!--    </trim>-->
+<!--    <trim prefix="values (" suffix=")" suffixOverrides=",">-->
+<!--      <if test="userName != null">-->
+<!--        #{userName,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="createAt != null">-->
+<!--        #{createAt,jdbcType=TIMESTAMP},-->
+<!--      </if>-->
+<!--      <if test="createBy != null">-->
+<!--        #{createBy,jdbcType=BIGINT},-->
+<!--      </if>-->
+<!--      <if test="updateAt != null">-->
+<!--        #{updateAt,jdbcType=TIMESTAMP},-->
+<!--      </if>-->
+<!--      <if test="updateBy != null">-->
+<!--        #{updateBy,jdbcType=BIGINT},-->
+<!--      </if>-->
+<!--      <if test="status != null">-->
+<!--        #{status,jdbcType=TINYINT},-->
+<!--      </if>-->
+<!--      <if test="salt != null">-->
+<!--        #{salt,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="password != null">-->
+<!--        #{password,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="loginFailedCount != null">-->
+<!--        #{loginFailedCount,jdbcType=TINYINT},-->
+<!--      </if>-->
+<!--      <if test="loginReleaseTime != null">-->
+<!--        #{loginReleaseTime,jdbcType=TIMESTAMP},-->
+<!--      </if>-->
+<!--      <if test="tenantId != null">-->
+<!--        #{tenantId,jdbcType=BIGINT},-->
+<!--      </if>-->
+<!--    </trim>-->
+<!--  </insert>-->
+<!--  <update id="updateByPrimaryKeySelective" parameterType="com.furion.user.login.dto.LoginUserDTO">-->
+<!--    update ums_user_login-->
+<!--    <set>-->
+<!--      <if test="userName != null">-->
+<!--        user_name = #{userName,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="createAt != null">-->
+<!--        create_at = #{createAt,jdbcType=TIMESTAMP},-->
+<!--      </if>-->
+<!--      <if test="createBy != null">-->
+<!--        create_by = #{createBy,jdbcType=BIGINT},-->
+<!--      </if>-->
+<!--      <if test="updateAt != null">-->
+<!--        update_at = #{updateAt,jdbcType=TIMESTAMP},-->
+<!--      </if>-->
+<!--      <if test="updateBy != null">-->
+<!--        update_by = #{updateBy,jdbcType=BIGINT},-->
+<!--      </if>-->
+<!--      <if test="status != null">-->
+<!--        `status` = #{status,jdbcType=TINYINT},-->
+<!--      </if>-->
+<!--      <if test="salt != null">-->
+<!--        salt = #{salt,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="password != null">-->
+<!--        `password` = #{password,jdbcType=VARCHAR},-->
+<!--      </if>-->
+<!--      <if test="loginFailedCount != null">-->
+<!--        login_failed_count = #{loginFailedCount,jdbcType=TINYINT},-->
+<!--      </if>-->
+<!--      <if test="loginReleaseTime != null">-->
+<!--        login_release_time = #{loginReleaseTime,jdbcType=TIMESTAMP},-->
+<!--      </if>-->
+<!--      <if test="tenantId != null">-->
+<!--        tenant_id = #{tenantId,jdbcType=BIGINT},-->
+<!--      </if>-->
+<!--    </set>-->
+<!--    where user_id = #{userId,jdbcType=BIGINT}-->
+<!--  </update>-->
+<!--  <update id="updateUmsUserLoginByUserInfoId" parameterType="com.furion.user.login.dto.LoginUserDTO">-->
+<!--    update ums_user_login-->
+<!--    set user_name = #{umsUserLogin.userName,jdbcType=VARCHAR},-->
+<!--      create_at = #{umsUserLogin.createAt,jdbcType=TIMESTAMP},-->
+<!--      create_by = #{umsUserLogin.createBy,jdbcType=BIGINT},-->
+<!--      update_at = #{umsUserLogin.updateAt,jdbcType=TIMESTAMP},-->
+<!--      update_by = #{umsUserLogin.updateBy,jdbcType=BIGINT},-->
+<!--      `status` = #{umsUserLogin.status,jdbcType=TINYINT},-->
+<!--      salt = #{umsUserLogin.salt,jdbcType=VARCHAR},-->
+<!--      `password` = #{umsUserLogin.password,jdbcType=VARCHAR},-->
+<!--      login_failed_count = #{umsUserLogin.loginFailedCount,jdbcType=TINYINT},-->
+<!--      login_release_time = #{umsUserLogin.loginReleaseTime,jdbcType=TIMESTAMP},-->
+<!--      tenant_id = #{umsUserLogin.tenantId,jdbcType=BIGINT}-->
+<!--    where user_id = #{umsUserLogin.userId,jdbcType=BIGINT}-->
+<!--  </update>-->
+</mapper>

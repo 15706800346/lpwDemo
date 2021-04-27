@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.furion.user.mapper.UmsAuthMapper">
+
+  <resultMap id="parentId" type="com.furion.user.model.dto.UmsAuthDTO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="seq" jdbcType="INTEGER" property="seq" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+
+    <collection property="children" select="getumstreebyid" column="id"/>
+  </resultMap>
+
+  <select id="getumsbyid" resultType="com.furion.user.model.dto.UmsAuthDTO">
+        select * from ums_auth where id = #{id} and status = 1
+  </select>
+
+  <select id="getumstreebyid" resultMap="parentId">
+        select * from ums_auth where parent_id=#{id} and status = 1
+  </select>
+
+  <select id="findByPage" resultMap="parentId">
+    select id,name,parent_id,url,seq,type,status,description,remarks
+    from ums_auth  where parent_id = 0 and status=1
+  </select>
+
+  <insert id="addums" keyColumn="id" keyProperty="id" parameterType="com.furion.user.model.dto.UmsAuthDTO" useGeneratedKeys="true">
+
+    insert into ums_auth
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="umsAuthDTO.name != null">
+        name,
+      </if>
+      <if test="umsAuthDTO.parentId != null">
+        parent_id,
+      </if>
+      <if test="umsAuthDTO.url != null">
+        url,
+      </if>
+      <if test="umsAuthDTO.seq != null">
+        seq,
+      </if>
+      <if test="umsAuthDTO.type != null">
+        type,
+      </if>
+      <if test="umsAuthDTO.status != null">
+        status,
+      </if>
+      <if test="umsAuthDTO.description != null">
+        description,
+      </if>
+      <if test="umsAuthDTO.remarks != null">
+        remarks,
+      </if>
+    </trim>
+
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+
+      <if test="umsAuthDTO.name != null">
+        #{umsAuthDTO.name,jdbcType=VARCHAR},
+      </if>
+      <if test="umsAuthDTO.parentId != null">
+        #{umsAuthDTO.parentId,jdbcType=BIGINT},
+      </if>
+      <if test="umsAuthDTO.url != null">
+        #{umsAuthDTO.url,jdbcType=VARCHAR},
+      </if>
+      <if test="umsAuthDTO.seq != null">
+        #{umsAuthDTO.seq,jdbcType=INTEGER},
+      </if>
+      <if test="umsAuthDTO.type != null">
+        #{umsAuthDTO.type,jdbcType=INTEGER},
+      </if>
+      <if test="umsAuthDTO.status != null">
+        #{umsAuthDTO.status,jdbcType=INTEGER},
+      </if>
+      <if test="umsAuthDTO.description != null">
+        #{umsAuthDTO.description,jdbcType=VARCHAR},
+      </if>
+      <if test="umsAuthDTO.remarks != null">
+        #{umsAuthDTO.remarks,jdbcType=VARCHAR},
+      </if>
+    </trim>
+
+  </insert>
+
+  <update id="updateums" parameterType="com.furion.user.model.dto.UmsAuthDTO">
+    update ums_auth
+    <set>
+      <if test="umsAuthDTO.name != null and umsAuthDTO.name !=''">
+        name=#{umsAuthDTO.name},
+      </if>
+      <if test="umsAuthDTO.parentId != null">
+        parent_id=#{umsAuthDTO.parentId},
+      </if>
+      <if test="umsAuthDTO.url != null and umsAuthDTO.url !=''">
+        url=#{umsAuthDTO.url},
+      </if>
+      <if test="umsAuthDTO.seq != null">
+        seq=#{umsAuthDTO.seq},
+      </if>
+      <if test="umsAuthDTO.type != null">
+        type=#{umsAuthDTO.type},
+      </if>
+      <if test="umsAuthDTO.status != null">
+        status=#{umsAuthDTO.status},
+      </if>
+      <if test="umsAuthDTO.description != null and umsAuthDTO.description !=''">
+        description=#{umsAuthDTO.description},
+      </if>
+      <if test="umsAuthDTO.remarks != null and umsAuthDTO.remarks !=''">
+        remarks=#{umsAuthDTO.remarks},
+      </if>
+    </set>
+    where id=#{umsAuthDTO.id}
+  </update>
+
+  <update id="deleteums" parameterType="com.furion.user.model.dto.UmsAuthDTO">
+        update  ums_auth
+        set status=2
+        where id=#{id}
+  </update>
+
+
+</mapper>
